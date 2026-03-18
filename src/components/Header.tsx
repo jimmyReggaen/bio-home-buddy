@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 const navItems = [
   { label: "About", href: "#about" },
@@ -15,8 +16,8 @@ const Header = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-white/5">
       <div className="container flex items-center justify-between h-16 md:h-20">
-        <a href="#" className="font-mono text-sm uppercase tracking-[0.15em] text-foreground">
-          Biometrics<span className="text-primary">_</span>House
+        <a href="#">
+          <img src={logo} alt="Biometrics House" className="h-6 md:h-8 w-auto" />
         </a>
 
         <nav className="hidden md:flex items-center gap-8">

@@ -1,12 +1,10 @@
 import { motion } from "framer-motion";
-import lobbyImg from "@/assets/lobby.jpg";
-import bistroImg from "@/assets/bistro.jpg";
-import zenImg from "@/assets/zen-zone.jpg";
+import haDashboardImg from "@/assets/ha-dashboard.png";
 
 const images = [
-  { src: lobbyImg, alt: "Lobby with social stairs" },
-  { src: bistroImg, alt: "Barista-run bistro" },
-  { src: zenImg, alt: "Zen zone for relaxation" },
+  { src: haDashboardImg, alt: "Home Assistant dashboard" },
+  { src: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80", alt: "Building exterior at dusk" },
+  { src: "https://images.unsplash.com/photo-1577495508048-b635879837f1?w=800&q=80", alt: "Architectural detail" },
 ];
 
 const AboutSection = () => (
