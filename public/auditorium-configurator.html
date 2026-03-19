@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>BH — Auditorium Konfigurátor</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f0f0f5;
+  --white: #fff;
+  --blue: #2323e8;
+  --blue-dk: #1818b0;
+  --blue-lt: #e8e8ff;
+  --blue-md: #b8b8f0;
+  --yellow: #e8f000;
+  --text: #1a1a2e;
+  --muted: #6060a0;
+  --border: #d0d0e8;
+  --green: #00b050;
+  --orange: #f08000;
+  --red: #e02020;
+  --r: 12px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;user-select:none;}
+body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;}
+
+/* NAV */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(240,240,245,.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;flex-shrink:0;}
+.bh-logo{display:flex;align-items:center;gap:8px;}
+.bh-mark{width:30px;height:30px;background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;color:#fff;flex-shrink:0;}
+.bh-name{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:var(--blue);letter-spacing:.05em;text-transform:uppercase;}
+.nav-room{font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;text-align:right;}
+
+/* CAPACITY BAR */
+.cap-strip{display:flex;align-items:center;gap:10px;padding:8px 16px;background:var(--white);border-bottom:1px solid var(--border);flex-shrink:0;}
+.cap-lbl{font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;white-space:nowrap;}
+.cap-track{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden;}
+.cap-fill{height:100%;background:var(--blue);border-radius:3px;transition:width .3s,background .3s;}
+.cap-fill.warn{background:var(--orange);}
+.cap-fill.over{background:var(--red);}
+.cap-val{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:18px;color:var(--blue);white-space:nowrap;min-width:60px;text-align:right;}
+.cap-val.warn{color:var(--orange);}
+.cap-val.over{color:var(--red);}
+
+/* PRESETS */
+.presets{display:flex;gap:6px;padding:10px 16px;overflow-x:auto;background:var(--white);border-bottom:1px solid var(--border);flex-shrink:0;}
+.presets::-webkit-scrollbar{height:0;}
+.preset-btn{flex-shrink:0;padding:7px 14px;border-radius:100px;border:1.5px solid var(--border);background:var(--bg);font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;}
+.preset-btn:hover{border-color:var(--blue);color:var(--blue);}
+.preset-btn.active{background:var(--blue);border-color:var(--blue);color:#fff;}
+.preset-sep{width:1px;background:var(--border);flex-shrink:0;margin:4px 2px;}
+.clear-btn{flex-shrink:0;padding:7px 14px;border-radius:100px;border:1.5px solid var(--border);background:var(--bg);font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--red);cursor:pointer;transition:all .2s;white-space:nowrap;}
+.clear-btn:hover{border-color:var(--red);background:#fff0f0;}
+
+/* CANVAS AREA */
+.canvas-wrap{flex:1;overflow:auto;position:relative;background:#dde0f0;}
+.canvas-wrap::-webkit-scrollbar{width:4px;height:4px;}
+.canvas-wrap::-webkit-scrollbar-thumb{background:var(--blue-md);border-radius:2px;}
+#canvas{position:relative;background:var(--white);touch-action:none;}
+
+/* PALETTE */
+.palette{background:var(--white);border-top:1px solid var(--border);padding:10px 14px;flex-shrink:0;}
+.pal-label{font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+.pal-label::after{content:'';flex:1;height:1px;background:var(--border);}
+.pal-scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;}
+.pal-scroll::-webkit-scrollbar{height:3px;}
+.pal-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.pi{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:4px;background:var(--blue-lt);border:1.5px solid var(--blue-md);border-radius:10px;padding:8px 10px;cursor:pointer;transition:all .15s;min-width:58px;}
+.pi:hover{background:var(--blue);border-color:var(--blue);transform:translateY(-2px);}
+.pi:hover .pi-n,.pi:hover .pi-d{color:#fff;}
+.pi-ico{font-size:18px;}
+.pi-n{font-family:'Space Mono',monospace;font-size:8px;color:var(--blue);text-transform:uppercase;letter-spacing:.08em;text-align:center;line-height:1.3;}
+.pi-d{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:var(--muted);}
+
+/* STATS */
+.stats-strip{display:flex;gap:0;background:var(--white);border-top:1px solid var(--border);flex-shrink:0;}
+.stat-box{flex:1;padding:8px 10px;text-align:center;border-right:1px solid var(--border);}
+.stat-box:last-child{border-right:none;}
+.stat-n{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:var(--blue);display:block;line-height:1;}
+.stat-l{font-family:'Space Mono',monospace;font-size:7px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;}
+
+/* ORDER BTN */
+.order-strip{padding:10px 16px 20px;background:var(--bg);display:flex;gap:8px;flex-shrink:0;}
+.obtn{flex:1;padding:13px;border-radius:100px;border:none;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;}
+.obtn.pri{background:var(--blue);color:#fff;}
+.obtn.pri:hover{background:var(--blue-dk);transform:translateY(-1px);}
+.obtn.sec{background:var(--yellow);color:var(--text);}
+
+/* TOAST */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--text);color:#fff;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;padding:9px 18px;border-radius:100px;opacity:0;transition:all .3s;pointer-events:none;z-index:999;white-space:nowrap;}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* TOOLTIP on hover */
+.furn-tooltip{position:fixed;background:var(--blue);color:#fff;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;padding:5px 10px;border-radius:6px;pointer-events:none;z-index:500;display:none;white-space:nowrap;}
+
+/* MODAL */
+.modal-ov{position:fixed;inset:0;background:rgba(10,10,30,.5);z-index:400;display:none;align-items:flex-end;backdrop-filter:blur(4px);}
+.modal-ov.open{display:flex;}
+.modal{background:var(--white);width:100%;border-radius:20px 20px 0 0;padding:22px 22px 36px;animation:sup .3s cubic-bezier(.2,.8,.3,1);}
+@keyframes sup{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.mhandle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 18px;}
+.mtitle{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:var(--blue);text-transform:uppercase;margin-bottom:16px;}
+.msum{background:var(--blue);border-radius:var(--r);padding:14px;margin-bottom:16px;}
+.msum-row{display:flex;justify-content:space-between;font-family:'Space Mono',monospace;font-size:10px;color:rgba(255,255,255,.65);padding:3px 0;}
+.msum-sep{height:1px;background:rgba(255,255,255,.15);margin:8px 0;}
+.msum-total{display:flex;justify-content:space-between;align-items:baseline;}
+.msum-tlbl{font-family:'Space Mono',monospace;font-size:9px;color:rgba(255,255,255,.5);letter-spacing:.15em;text-transform:uppercase;}
+.msum-tnum{font-family:'Barlow Condensed',sans-serif;font-size:38px;font-weight:900;color:var(--yellow);}
+.mfields{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
+.mf{background:var(--bg);border:1.5px solid var(--border);border-radius:var(--r);padding:12px 14px;transition:border-color .2s;}
+.mf:focus-within{border-color:var(--blue);}
+.mf label{display:block;font-family:'Space Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-bottom:5px;}
+.mf input,.mf textarea{background:none;border:none;outline:none;font-family:'Barlow',sans-serif;font-size:15px;font-weight:600;color:var(--text);width:100%;resize:none;}
+.mf textarea{min-height:50px;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="bh-logo">
+    <div class="bh-mark">BH</div>
+    <div class="bh-name">HOUS≡</div>
+  </div>
+  <div class="nav-room">Auditorium<br>0 — HUB · 20×15 m</div>
+</nav>
+
+<div class="cap-strip">
+  <div class="cap-lbl">Kapacita</div>
+  <div class="cap-track"><div class="cap-fill" id="cap-fill" style="width:0%"></div></div>
+  <div class="cap-val" id="cap-val">0 / 80</div>
+</div>
+
+<!-- PRESETS -->
+<div class="presets">
+  <button class="preset-btn" onclick="applyPreset('skoliaci')">🎓 Školiaci</button>
+  <button class="preset-btn" onclick="applyPreset('konferencny')">🤝 Konferenčný</button>
+  <button class="preset-btn" onclick="applyPreset('theater')">🎤 Theater</button>
+  <button class="preset-btn" onclick="applyPreset('banket')">🍽 Banket</button>
+  <button class="preset-btn" onclick="applyPreset('networking')">☕ Networking</button>
+  <div class="preset-sep"></div>
+  <button class="clear-btn" onclick="clearAll()">✕ Vymazať</button>
+</div>
+
+<!-- CANVAS -->
+<div class="canvas-wrap" id="canvas-wrap">
+  <canvas id="canvas"></canvas>
+</div>
+
+<!-- PALETTE -->
+<div class="palette">
+  <div class="pal-label">Objekty — klikni pre pridanie</div>
+  <div class="pal-scroll">
+    <div class="pi" onclick="addItem('table6')"><span class="pi-ico">🪑</span><span class="pi-n">Stôl 6</span><span class="pi-d">6 os.</span></div>
+    <div class="pi" onclick="addItem('table4')"><span class="pi-ico">🪑</span><span class="pi-n">Stôl 4</span><span class="pi-d">4 os.</span></div>
+    <div class="pi" onclick="addItem('table2')"><span class="pi-ico">🪑</span><span class="pi-n">Stôl 2</span><span class="pi-d">2 os.</span></div>
+    <div class="pi" onclick="addItem('chair')"><span class="pi-ico">🪑</span><span class="pi-n">Stolička</span><span class="pi-d">1 os.</span></div>
+    <div class="pi" onclick="addItem('roundtable8')"><span class="pi-ico">⭕</span><span class="pi-n">Okrúhly 8</span><span class="pi-d">8 os.</span></div>
+    <div class="pi" onclick="addItem('stage')"><span class="pi-ico">🎤</span><span class="pi-n">Pódium</span><span class="pi-d">—</span></div>
+    <div class="pi" onclick="addItem('ledwall')"><span class="pi-ico">📺</span><span class="pi-n">LED stena</span><span class="pi-d">—</span></div>
+    <div class="pi" onclick="addItem('projection')"><span class="pi-ico">📽</span><span class="pi-n">Projekcia</span><span class="pi-d">—</span></div>
+    <div class="pi" onclick="addItem('catering')"><span class="pi-ico">🍕</span><span class="pi-n">Catering</span><span class="pi-d">—</span></div>
+    <div class="pi" onclick="addItem('bar')"><span class="pi-ico">🍸</span><span class="pi-n">Bar</span><span class="pi-d">—</span></div>
+    <div class="pi" onclick="addItem('camera')"><span class="pi-ico">🎥</span><span class="pi-n">Kamera</span><span class="pi-d">—</span></div>
+    <div class="pi" onclick="addItem('mic')"><span class="pi-ico">🎙</span><span class="pi-n">Mikrofón</span><span class="pi-d">—</span></div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stat-box"><span class="stat-n" id="s-chairs">0</span><span class="stat-l">Stoličky</span></div>
+  <div class="stat-box"><span class="stat-n" id="s-tables">0</span><span class="stat-l">Stoly</span></div>
+  <div class="stat-box"><span class="stat-n" id="s-extra">0</span><span class="stat-l">Doplnky</span></div>
+  <div class="stat-box"><span class="stat-n" id="s-m2">0</span><span class="stat-l">Využité m²</span></div>
+</div>
+
+<div class="order-strip">
+  <button class="obtn sec" onclick="openModal()">📋 Súhrn</button>
+  <button class="obtn pri" onclick="openModal()">→ Objednať</button>
+</div>
+
+<div class="furn-tooltip" id="tooltip"></div>
+<div class="toast" id="toast"></div>
+
+<!-- MODAL -->
+<div class="modal-ov" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <div class="mtitle">Objednávka</div>
+    <div class="msum" id="msum"></div>
+    <div class="mfields">
+      <div class="mf"><label>Meno</label><input type="text" placeholder="Ján Novák" id="fn"></div>
+      <div class="mf"><label>E-mail</label><input type="email" placeholder="jan@firma.sk" id="fe"></div>
+      <div class="mf"><label>Dátum eventu</label><input type="date" id="fd"></div>
+      <div class="mf"><label>Poznámka</label><textarea placeholder="Počet hostí, čas..."></textarea></div>
+    </div>
+    <button class="obtn pri" style="width:100%;padding:14px;" onclick="submitOrder()">📨 Odoslať dopyt</button>
+  </div>
+</div>
+
+<script>
+const ROOM = {
+  widthM: 20, heightM: 15,
+  cellM: 0.5,
+  maxCap: 80,
+  name: 'Auditorium',
+  floor: '0 — HUB'
+};
+
+let PX_PER_M = 30;
+let CELL;
+
+const COLS = ROOM.widthM / ROOM.cellM;
+const ROWS = ROOM.heightM / ROOM.cellM;
+
+const FURN = {
+  table6: {
+    label:'Stôl 6-miestny', wM:1.8, hM:0.8, cap:6, type:'table',
+    color:'#d0d0f8', stroke:'#2323e8', chairs:[
+      {s:'top',n:3},{s:'bottom',n:3}
+    ]
+  },
+  table4: {
+    label:'Stôl 4-miestny', wM:1.4, hM:0.7, cap:4, type:'table',
+    color:'#dde0ff', stroke:'#2323e8', chairs:[
+      {s:'top',n:2},{s:'bottom',n:2}
+    ]
+  },
+  table2: {
+    label:'Stôl 2-miestny', wM:0.8, hM:0.7, cap:2, type:'table',
+    color:'#e8eaff', stroke:'#2323e8', chairs:[
+      {s:'top',n:1},{s:'bottom',n:1}
+    ]
+  },
+  chair: {
+    label:'Stolička', wM:0.5, hM:0.5, cap:1, type:'chair',
+    color:'#c8c8f0', stroke:'#2323e8', chairs:[]
+  },
+  roundtable8: {
+    label:'Okrúhly stôl 8', wM:1.6, hM:1.6, cap:8, type:'roundtable',
+    color:'#d0d0f8', stroke:'#2323e8', chairs:[]
+  },
+  stage: {
+    label:'Pódium / Stage', wM:4.0, hM:1.2, cap:0, type:'stage',
+    color:'#1a1a2e', stroke:'#2323e8', chairs:[]
+  },
+  ledwall: {
+    label:'LED stena', wM:4.0, hM:0.3, cap:0, type:'screen',
+    color:'#0a0a20', stroke:'#00e5ff', chairs:[]
+  },
+  projection: {
+    label:'Projekcia / Plátno', wM:3.0, hM:0.2, cap:0, type:'screen',
+    color:'#1a1a30', stroke:'#e8f000', chairs:[]
+  },
+  catering: {
+    label:'Catering stôl', wM:1.8, hM:0.6, cap:0, type:'service',
+    color:'#fff8e0', stroke:'#c8a000', chairs:[]
+  },
+  bar: {
+    label:'Bar / Bufet', wM:2.0, hM:0.6, cap:0, type:'service',
+    color:'#fff0f8', stroke:'#c020a0', chairs:[]
+  },
+  camera: {
+    label:'Kamera', wM:0.5, hM:0.5, cap:0, type:'tech',
+    color:'#1a1a2e', stroke:'#00e5ff', chairs:[]
+  },
+  mic: {
+    label:'Mikrofón / Pult', wM:0.5, hM:0.5, cap:0, type:'tech',
+    color:'#2323e8', stroke:'#e8f000', chairs:[]
+  }
+};
+
+const PRESETS = {
+  skoliaci: () => {
+    clearAll(true);
+    place('stage', 8, 1);
+    place('ledwall', 8, 0);
+    const rows = [[5],[12],[19]];
+    rows.forEach(r => {
+      place('table6', 4, r[0]);
+      place('table6', 4, r[0]+4);
+      place('table6', 18, r[0]);
+      place('table6', 18, r[0]+4);
+    });
+    toast('Školiaci preset aplikovaný');
+  },
+  konferencny: () => {
+    clearAll(true);
+    place('ledwall', 9, 0);
+    for(let c=6;c<=28;c+=5) place('table6',c,3);
+    place('table6',3,8); place('table6',3,13); place('table6',3,18);
+    place('table6',31,8); place('table6',31,13); place('table6',31,18);
+    toast('Konferenčný U-tvar aplikovaný');
+  },
+  theater: () => {
+    clearAll(true);
+    place('stage', 8, 0);
+    place('ledwall', 8, 2);
+    for(let r=5;r<=26;r+=3){
+      for(let c=3;c<=36;c+=2){
+        place('chair',c,r);
+      }
+    }
+    toast('Theater preset aplikovaný');
+  },
+  banket: () => {
+    clearAll(true);
+    place('ledwall', 10, 0);
+    place('catering', 3, 1);
+    place('catering', 3, 4);
+    place('bar', 30, 1);
+    const positions = [
+      [5,5],[15,5],[25,5],
+      [5,14],[15,14],[25,14],
+      [10,22],[20,22]
+    ];
+    positions.forEach(([c,r]) => place('roundtable8',c,r));
+    toast('Banket preset aplikovaný');
+  },
+  networking: () => {
+    clearAll(true);
+    place('ledwall', 10, 0);
+    place('bar', 30, 1);
+    place('catering', 3, 1);
+    place('catering', 3, 5);
+    [[5,6],[14,4],[24,6],[8,16],[19,14],[28,16]].forEach(([c,r])=>place('table4',c,r));
+    [[10,10],[20,8]].forEach(([c,r])=>place('roundtable8',c,r));
+    toast('Networking preset aplikovaný');
+  }
+};
+
+let items = [];
+let uid = 0;
+let selected = null;
+let dragging = null;
+let hoveredUid = null;
+
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const wrap = document.getElementById('canvas-wrap');
+
+function resize() {
+  const wrapW = wrap.clientWidth;
+  PX_PER_M = Math.max(20, Math.min(40, (wrapW - 32) / ROOM.widthM));
+  CELL = PX_PER_M * ROOM.cellM;
+
+  const cw = Math.round(COLS * CELL);
+  const ch = Math.round(ROWS * CELL);
+  canvas.width = cw;
+  canvas.height = ch;
+  canvas.style.width = cw + 'px';
+  canvas.style.height = ch + 'px';
+  draw();
+}
+
+function draw() {
+  const cw = canvas.width, ch = canvas.height;
+  ctx.clearRect(0,0,cw,ch);
+
+  ctx.fillStyle = '#f8f8ff';
+  ctx.fillRect(0,0,cw,ch);
+
+  ctx.strokeStyle = 'rgba(35,35,232,0.08)';
+  ctx.lineWidth = 0.5;
+  for(let c=0;c<=COLS;c++){
+    ctx.beginPath(); ctx.moveTo(c*CELL,0); ctx.lineTo(c*CELL,ch); ctx.stroke();
+  }
+  for(let r=0;r<=ROWS;r++){
+    ctx.beginPath(); ctx.moveTo(0,r*CELL); ctx.lineTo(cw,r*CELL); ctx.stroke();
+  }
+
+  ctx.strokeStyle = 'rgba(35,35,232,0.15)';
+  ctx.lineWidth = 1;
+  for(let c=0;c<=COLS;c+=2){
+    ctx.beginPath(); ctx.moveTo(c*CELL,0); ctx.lineTo(c*CELL,ch); ctx.stroke();
+  }
+  for(let r=0;r<=ROWS;r+=2){
+    ctx.beginPath(); ctx.moveTo(0,r*CELL); ctx.lineTo(cw,r*CELL); ctx.stroke();
+  }
+
+  ctx.fillStyle = 'rgba(35,35,232,0.3)';
+  ctx.font = `bold ${Math.max(7,CELL*0.45)}px Space Mono`;
+  ctx.textAlign = 'center';
+  for(let c=0;c<=COLS;c+=4){
+    ctx.fillText((c*ROOM.cellM)+'m', c*CELL, 8);
+  }
+  ctx.textAlign = 'right';
+  for(let r=0;r<=ROWS;r+=4){
+    if(r>0) ctx.fillText((r*ROOM.cellM)+'m', cw-2, r*CELL-2);
+  }
+
+  ctx.strokeStyle = '#2323e8';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(0,0,cw,ch);
+
+  const sorted = [...items].sort((a,b)=>(a.uid===selected?1:0)-(b.uid===selected?1:0));
+  sorted.forEach(item => drawItem(item));
+}
+
+function drawItem(item) {
+  const f = FURN[item.furnId];
+  if(!f) return;
+  const x = item.col * CELL;
+  const y = item.row * CELL;
+  const w = Math.round((f.wM / ROOM.cellM) * CELL);
+  const h = Math.round((f.hM / ROOM.cellM) * CELL);
+  const isSel = item.uid === selected;
+  const isHov = item.uid === hoveredUid;
+
+  ctx.save();
+
+  if(isSel) {
+    ctx.shadowColor = 'rgba(35,35,232,0.35)';
+    ctx.shadowBlur = 10;
+  }
+
+  if(f.type === 'table' && f.chairs.length > 0) {
+    drawChairs(f, x, y, w, h, isSel);
+  }
+
+  if(f.type === 'roundtable') {
+    drawRoundChairs(x, y, w, h, f.cap, isSel);
+  }
+
+  ctx.shadowBlur = 0;
+
+  if(f.type === 'roundtable') {
+    ctx.beginPath();
+    ctx.arc(x+w/2, y+h/2, w/2, 0, Math.PI*2);
+    ctx.fillStyle = f.color;
+    ctx.fill();
+    ctx.strokeStyle = isSel ? '#e8f000' : f.stroke;
+    ctx.lineWidth = isSel ? 2.5 : 1.5;
+    ctx.stroke();
+  } else if(f.type === 'stage') {
+    ctx.fillStyle = f.color;
+    ctx.beginPath();
+    ctx.roundRect(x, y, w, h, 4);
+    ctx.fill();
+    ctx.strokeStyle = isSel ? '#e8f000' : f.stroke;
+    ctx.lineWidth = isSel ? 2.5 : 1.5;
+    ctx.stroke();
+    ctx.fillStyle = '#e8f000';
+    ctx.font = `bold ${Math.max(8,CELL*0.5)}px Barlow Condensed`;
+    ctx.textAlign = 'center';
+    ctx.fillText('STAGE / PÓDIUM', x+w/2, y+h/2+4);
+  } else if(f.type === 'screen') {
+    ctx.fillStyle = f.color;
+    ctx.beginPath();
+    ctx.roundRect(x, y, w, h, 2);
+    ctx.fill();
+    ctx.strokeStyle = isSel ? '#ffffff' : f.stroke;
+    ctx.lineWidth = isSel ? 2.5 : 1.5;
+    ctx.stroke();
+    ctx.shadowColor = f.stroke;
+    ctx.shadowBlur = 6;
+    ctx.strokeRect(x+1,y+1,w-2,h-2);
+    ctx.shadowBlur = 0;
+  } else if(f.type === 'service') {
+    ctx.fillStyle = f.color;
+    ctx.beginPath();
+    ctx.roundRect(x, y, w, h, 3);
+    ctx.fill();
+    ctx.strokeStyle = isSel ? '#2323e8' : f.stroke;
+    ctx.lineWidth = isSel ? 2.5 : 1.5;
+    ctx.stroke();
+    ctx.fillStyle = f.stroke;
+    const dotCount = Math.floor(w / (CELL*1.2));
+    for(let i=0;i<dotCount;i++){
+      ctx.beginPath();
+      ctx.arc(x + (i+1)*(w/(dotCount+1)), y+h*0.65, Math.max(2,CELL*0.12), 0, Math.PI*2);
+      ctx.fill();
+    }
+  } else if(f.type === 'tech') {
+    ctx.fillStyle = f.color;
+    ctx.beginPath();
+    ctx.roundRect(x, y, w, h, 3);
+    ctx.fill();
+    ctx.strokeStyle = isSel ? '#e8f000' : f.stroke;
+    ctx.lineWidth = isSel ? 2.5 : 1.5;
+    ctx.stroke();
+    ctx.fillStyle = f.stroke;
+    ctx.font = `${Math.max(8,CELL*0.7)}px sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.fillText(item.furnId==='camera'?'🎥':'🎙', x+w/2, y+h/2+4);
+  } else {
+    ctx.fillStyle = f.color;
+    ctx.beginPath();
+    ctx.roundRect(x, y, w, h, 3);
+    ctx.fill();
+    ctx.strokeStyle = isSel ? '#e8f000' : f.stroke;
+    ctx.lineWidth = isSel ? 2.5 : 1.5;
+    ctx.stroke();
+  }
+
+  if(f.type === 'table' || f.type === 'roundtable') {
+    ctx.fillStyle = '#2323e8';
+    ctx.font = `600 ${Math.max(7,CELL*0.45)}px Barlow`;
+    ctx.textAlign = 'center';
+    ctx.fillText(f.cap+' os.', x+w/2, y+h/2+(f.type==='roundtable'?4:3));
+  }
+
+  if(isHov && !isSel) {
+    ctx.fillStyle = 'rgba(35,35,232,0.08)';
+    ctx.beginPath();
+    ctx.roundRect(x,y,w,h,3);
+    ctx.fill();
+  }
+
+  if(isSel) {
+    const hw = 6, hh = 6;
+    ctx.fillStyle = '#e8f000';
+    [[x-hw/2,y-hh/2],[x+w-hw/2,y-hh/2],[x-hw/2,y+h-hh/2],[x+w-hw/2,y+h-hh/2]].forEach(([hx,hy])=>{
+      ctx.beginPath(); ctx.roundRect(hx,hy,hw,hh,1); ctx.fill();
+      ctx.strokeStyle='#2323e8'; ctx.lineWidth=1; ctx.stroke();
+    });
+    const dx = x+w+3, dy = y-3;
+    ctx.fillStyle = '#e02020';
+    ctx.beginPath(); ctx.arc(dx+6,dy+6,7,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 9px Barlow';
+    ctx.textAlign = 'center';
+    ctx.fillText('×', dx+6, dy+10);
+  }
+
+  if(CELL >= 20) {
+    ctx.fillStyle = 'rgba(35,35,232,0.4)';
+    ctx.font = `${Math.max(6,CELL*0.3)}px Space Mono`;
+    ctx.textAlign = 'left';
+    ctx.fillText(`${f.wM}×${f.hM}m`, x+2, y+h-2);
+  }
+
+  ctx.restore();
+}
+
+function drawChairs(f, x, y, w, h, isSel) {
+  const cSize = Math.max(6, CELL * 0.6);
+  const cDepth = Math.max(4, CELL * 0.35);
+  const stroke = isSel ? 'rgba(35,35,232,0.5)' : 'rgba(35,35,232,0.3)';
+
+  f.chairs.forEach(side => {
+    const n = side.n;
+    const gap = w / (n + 1);
+    for(let i=1;i<=n;i++){
+      const cx = x + gap*i - cSize/2;
+      ctx.fillStyle = '#e0e0ff';
+      ctx.strokeStyle = stroke;
+      ctx.lineWidth = 1;
+      if(side.s === 'top') {
+        ctx.beginPath();
+        ctx.roundRect(cx, y - cDepth - 2, cSize, cDepth, 2);
+        ctx.fill(); ctx.stroke();
+      } else {
+        ctx.beginPath();
+        ctx.roundRect(cx, y + h + 2, cSize, cDepth, 2);
+        ctx.fill(); ctx.stroke();
+      }
+    }
+  });
+}
+
+function drawRoundChairs(x, y, w, h, n, isSel) {
+  const r = w/2;
+  const cx = x + r, cy = y + r;
+  const cR = Math.max(5, CELL*0.5);
+  const dist = r + cR + 2;
+  for(let i=0;i<n;i++){
+    const angle = (i/n)*Math.PI*2 - Math.PI/2;
+    const chx = cx + Math.cos(angle)*dist;
+    const chy = cy + Math.sin(angle)*dist;
+    ctx.fillStyle = '#e0e0ff';
+    ctx.strokeStyle = isSel ? 'rgba(35,35,232,0.5)' : 'rgba(35,35,232,0.3)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(chx, chy, cR, 0, Math.PI*2);
+    ctx.fill(); ctx.stroke();
+  }
+}
+
+function place(furnId, col, row) {
+  const f = FURN[furnId];
+  if(!f) return;
+  const wCells = Math.round(f.wM / ROOM.cellM);
+  const hCells = Math.round(f.hM / ROOM.cellM);
+  col = Math.max(0, Math.min(col, COLS - wCells));
+  row = Math.max(0, Math.min(row, ROWS - hCells));
+  items.push({uid: uid++, furnId, col, row});
+  updateStats(); draw();
+}
+
+function addItem(furnId) {
+  const f = FURN[furnId];
+  if(!f) return;
+  const wCells = Math.round(f.wM / ROOM.cellM);
+  const hCells = Math.round(f.hM / ROOM.cellM);
+  let col = 2, row = 2;
+  const n = items.filter(i=>i.furnId===furnId).length;
+  const rowsPerLine = Math.max(1, Math.floor((COLS-4) / (wCells+1)));
+  col = 2 + (n % rowsPerLine) * (wCells + 1);
+  row = 2 + Math.floor(n / rowsPerLine) * (hCells + 2);
+  col = Math.min(col, COLS - wCells - 1);
+  row = Math.min(row, ROWS - hCells - 1);
+  place(furnId, col, row);
+  selected = uid - 1;
+  toast(f.label + ' pridaný');
+}
+
+function clearAll(silent=false) {
+  items = []; selected = null;
+  document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active'));
+  updateStats(); draw();
+  if(!silent) toast('Miestnosť vymazaná');
+}
+
+function deleteSelected() {
+  if(selected===null) return;
+  items = items.filter(i=>i.uid!==selected);
+  selected = null;
+  updateStats(); draw();
+}
+
+function applyPreset(name) {
+  document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+  PRESETS[name]();
+  updateStats(); draw();
+}
+
+function getCell(e) {
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  const cx = (e.touches ? e.touches[0].clientX : e.clientX);
+  const cy = (e.touches ? e.touches[0].clientY : e.clientY);
+  return {
+    col: Math.floor((cx - rect.left) * scaleX / CELL),
+    row: Math.floor((cy - rect.top) * scaleY / CELL),
+    px: (cx - rect.left) * scaleX,
+    py: (cy - rect.top) * scaleY
+  };
+}
+
+function itemAt(col, row) {
+  for(let i=items.length-1;i>=0;i--){
+    const item = items[i];
+    const f = FURN[item.furnId];
+    if(!f) continue;
+    const wC = Math.round(f.wM/ROOM.cellM);
+    const hC = Math.round(f.hM/ROOM.cellM);
+    if(col>=item.col && col<item.col+wC && row>=item.row && row<item.row+hC) return item;
+  }
+  return null;
+}
+
+function isDeleteButton(item, px, py) {
+  const f = FURN[item.furnId];
+  if(!f) return false;
+  const x = item.col * CELL;
+  const y = item.row * CELL;
+  const w = Math.round((f.wM/ROOM.cellM)*CELL);
+  const dx = x+w+3+6, dy = y-3+6;
+  return Math.sqrt((px-dx)**2+(py-dy)**2) < 10;
+}
+
+canvas.addEventListener('mousedown', onDown);
+canvas.addEventListener('touchstart', onDown, {passive:false});
+document.addEventListener('mousemove', onMove);
+document.addEventListener('touchmove', onMove, {passive:false});
+document.addEventListener('mouseup', onUp);
+document.addEventListener('touchend', onUp);
+
+function onDown(e) {
+  if(e.cancelable) e.preventDefault();
+  const {col, row, px, py} = getCell(e);
+  const item = itemAt(col, row);
+
+  if(selected !== null) {
+    const selItem = items.find(i=>i.uid===selected);
+    if(selItem && isDeleteButton(selItem, px, py)) {
+      deleteSelected(); return;
+    }
+  }
+
+  if(item) {
+    selected = item.uid;
+    dragging = {uid: item.uid, startCol: col, startRow: row, origCol: item.col, origRow: item.row};
+  } else {
+    selected = null;
+  }
+  draw();
+}
+
+function onMove(e) {
+  if(e.cancelable) e.preventDefault();
+  const {col, row} = getCell(e);
+
+  if(dragging) {
+    const item = items.find(i=>i.uid===dragging.uid);
+    if(!item) return;
+    const f = FURN[item.furnId];
+    const wC = Math.round(f.wM/ROOM.cellM);
+    const hC = Math.round(f.hM/ROOM.cellM);
+    const dc = col - dragging.startCol;
+    const dr = row - dragging.startRow;
+    item.col = Math.max(0, Math.min(dragging.origCol+dc, COLS-wC));
+    item.row = Math.max(0, Math.min(dragging.origRow+dr, ROWS-hC));
+    draw();
+    updateTooltip(e, item, f);
+  } else {
+    const item = itemAt(col,row);
+    hoveredUid = item ? item.uid : null;
+    draw();
+    if(item) {
+      const f = FURN[item.furnId];
+      updateTooltip(e, item, f);
+    } else {
+      hideTooltip();
+    }
+  }
+}
+
+function onUp() {
+  dragging = null;
+  updateStats();
+  draw();
+}
+
+function updateTooltip(e, item, f) {
+  const t = document.getElementById('tooltip');
+  const cx = e.touches ? e.touches[0].clientX : e.clientX;
+  const cy = e.touches ? e.touches[0].clientY : e.clientY;
+  t.textContent = `${f.label} · ${f.wM}×${f.hM}m${f.cap?' · '+f.cap+' os.':''}`;
+  t.style.left = (cx+12)+'px';
+  t.style.top = (cy-28)+'px';
+  t.style.display = 'block';
+}
+function hideTooltip() { document.getElementById('tooltip').style.display='none'; }
+
+document.addEventListener('keydown', e => {
+  if((e.key==='Delete'||e.key==='Backspace') && selected!==null && document.activeElement.tagName!=='INPUT') {
+    deleteSelected();
+  }
+  if(e.key==='Escape') { selected=null; draw(); }
+});
+
+function updateStats() {
+  let totalCap=0, chairs=0, tables=0, extra=0, m2=0;
+  items.forEach(item=>{
+    const f=FURN[item.furnId];
+    if(!f) return;
+    totalCap += f.cap;
+    if(f.type==='chair') chairs++;
+    else if(f.type==='table'||f.type==='roundtable'){tables++;chairs+=f.cap;}
+    else extra++;
+    m2 += f.wM * f.hM;
+  });
+
+  const pct = Math.min(100,(totalCap/ROOM.maxCap)*100);
+  const fill = document.getElementById('cap-fill');
+  const val = document.getElementById('cap-val');
+  fill.style.width = pct+'%';
+  if(pct>100){fill.className='cap-fill over';val.className='cap-val over';}
+  else if(pct>80){fill.className='cap-fill warn';val.className='cap-val warn';}
+  else{fill.className='cap-fill';val.className='cap-val';}
+  val.textContent = totalCap+' / '+ROOM.maxCap;
+
+  document.getElementById('s-chairs').textContent = chairs;
+  document.getElementById('s-tables').textContent = tables;
+  document.getElementById('s-extra').textContent = extra;
+  document.getElementById('s-m2').textContent = m2.toFixed(1);
+}
+
+function openModal() {
+  const counts={};
+  let cap=0;
+  items.forEach(i=>{
+    const f=FURN[i.furnId];
+    if(!f) return;
+    counts[i.furnId]=(counts[i.furnId]||0)+1;
+    cap+=f.cap;
+  });
+  let rows = Object.entries(counts).map(([id,n])=>{
+    const f=FURN[id];
+    return `<div class="msum-row"><span>${n}× ${f.label}</span><span>${f.cap?n*f.cap+' os.':'—'}</span></div>`;
+  }).join('');
+  const basePrice = 400;
+  document.getElementById('msum').innerHTML=`
+    <div class="msum-row"><span>Auditorium · 0 HUB</span><span>20×15 m</span></div>
+    ${rows}
+    <div class="msum-sep"></div>
+    <div class="msum-row"><span>Celková kapacita</span><span>${cap} / ${ROOM.maxCap} os.</span></div>
+    <div class="msum-sep"></div>
+    <div class="msum-total">
+      <div><div class="msum-tlbl">Orientačná cena / deň</div></div>
+      <div class="msum-tnum">${basePrice} €</div>
+    </div>`;
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+function submitOrder(){
+  const n=document.getElementById('fn').value;
+  const em=document.getElementById('fe').value;
+  if(!n||!em){toast('Vyplňte meno a e-mail');return;}
+  closeModal();
+  toast('✓ Dopyt odoslaný! BH-'+Math.floor(10000+Math.random()*90000));
+}
+
+let tt;
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('on');
+  clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('on'),2200);
+}
+
+window.addEventListener('resize',()=>{resize();});
+resize();
+updateStats();
+</script>
+</body>
+</html>
