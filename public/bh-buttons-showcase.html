@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biometrics House — Button & Card Showcase</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bh-primary:#1B00E2;--bh-dark:#031C40;--bh-azure:#0057FF;--bh-sky:#4590FF}
+html{scroll-behavior:smooth}
+body{font-family:'Montserrat',sans-serif;background:var(--bh-dark);color:#fff;overflow-x:hidden}
+
+/* ── Progress ── */
+.scroll-progress{position:fixed;top:0;left:0;height:3px;z-index:9999;background:linear-gradient(90deg,var(--bh-primary),var(--bh-azure),var(--bh-sky));width:0%;transition:width .05s linear}
+
+/* ── Hero ── */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden}
+.hero-aurora{position:absolute;inset:0;filter:blur(100px);opacity:.6}
+.hero-aurora .blob{position:absolute;border-radius:50%;animation:af 12s ease-in-out infinite alternate}
+.hero-aurora .b1{width:500px;height:500px;background:var(--bh-primary);top:-10%;left:10%}
+.hero-aurora .b2{width:400px;height:400px;background:var(--bh-dark);bottom:0;right:10%;animation-delay:-3s;animation-duration:15s}
+.hero-aurora .b3{width:350px;height:350px;background:var(--bh-azure);top:30%;left:50%;animation-delay:-6s;animation-duration:18s}
+.hero-aurora .b4{width:300px;height:300px;background:var(--bh-sky);top:60%;left:20%;animation-delay:-9s;animation-duration:14s}
+@keyframes af{0%{transform:translate(0,0) scale(1)}33%{transform:translate(40px,-30px) scale(1.1)}66%{transform:translate(-30px,40px) scale(.95)}100%{transform:translate(20px,-20px) scale(1.05)}}
+.hero-content{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center}
+.hero h1{font-size:clamp(2.5rem,7vw,5.5rem);font-weight:700;line-height:1;background:linear-gradient(135deg,#fff 0%,var(--bh-sky) 50%,var(--bh-primary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:0;animation:fu .8s .3s forwards}
+.hero p{font-size:1.1rem;color:var(--bh-sky);max-width:550px;margin:1.5rem auto 0;opacity:0;animation:fu .8s .5s forwards}
+.hero h1,.hero p,.hero svg{transform:translateY(30px)}
+@keyframes fu{to{opacity:1;transform:translateY(0)}}
+
+/* ── Section ── */
+.section{padding:3rem 2rem;max-width:1440px;margin:0 auto}
+.section-label{font-size:.65rem;font-weight:700;letter-spacing:.3em;color:var(--bh-sky);text-transform:uppercase;margin-bottom:.75rem}
+.section-title{font-size:clamp(1.8rem,4vw,3rem);font-weight:700;margin-bottom:.5rem}
+.section-desc{font-size:.95rem;color:rgba(255,255,255,.4);max-width:600px;margin-bottom:2.5rem}
+
+/* ── Reveal ── */
+.reveal{opacity:0;transform:translateY(50px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-stagger{opacity:0;transition:opacity .6s}
+.reveal-stagger.visible{opacity:1}
+.reveal-stagger.visible .section-label{animation:su .6s 0s cubic-bezier(.16,1,.3,1) both}
+.reveal-stagger.visible .section-title{animation:su .6s .1s cubic-bezier(.16,1,.3,1) both}
+.reveal-stagger.visible .section-desc{animation:su .6s .2s cubic-bezier(.16,1,.3,1) both}
+@keyframes su{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Stagger children ── */
+.stagger>.si{opacity:0;transform:translateY(30px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
+.stagger.visible>.si{opacity:1;transform:translateY(0)}
+.stagger.visible>.si:nth-child(1){transition-delay:0s}.stagger.visible>.si:nth-child(2){transition-delay:.06s}.stagger.visible>.si:nth-child(3){transition-delay:.12s}.stagger.visible>.si:nth-child(4){transition-delay:.18s}.stagger.visible>.si:nth-child(5){transition-delay:.24s}.stagger.visible>.si:nth-child(6){transition-delay:.3s}.stagger.visible>.si:nth-child(7){transition-delay:.36s}.stagger.visible>.si:nth-child(8){transition-delay:.42s}
+
+/* ── Grids ── */
+.btn-row{display:flex;flex-wrap:wrap;gap:.75rem;margin-bottom:1.5rem;align-items:center}
+.btn-row-label{width:100%;font-size:.6rem;font-weight:700;letter-spacing:.2em;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:.25rem}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.5rem;margin-top:2rem}
+
+/* ═══ BASE BUTTON ═══ */
+.btn{
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-family:'Montserrat',sans-serif;font-weight:700;font-size:.875rem;
+  border:none;cursor:pointer;padding:0 1.25rem;height:44px;border-radius:10px;
+  transition:all .3s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden;
+}
+.btn:hover{transform:translateY(-2px)}.btn:active{transform:translateY(0) scale(.97)}
+.btn-lg{height:52px;padding:0 1.75rem;font-size:1rem;border-radius:12px}
+.btn-pill{border-radius:999px}
+.btn-icon{width:44px;height:44px;padding:0;border-radius:50%;justify-content:center}
+.btn-icon.btn-lg{width:52px;height:52px}
+.btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+
+/* ═══ 01 — SOLID BUTTONS ═══ */
+.btn-primary{background:var(--bh-primary);color:#fff}.btn-primary:hover{box-shadow:0 8px 30px rgba(27,0,226,.4)}
+.btn-azure{background:var(--bh-azure);color:#fff}.btn-azure:hover{box-shadow:0 8px 30px rgba(0,87,255,.4)}
+.btn-sky{background:var(--bh-sky);color:#fff}.btn-sky:hover{box-shadow:0 8px 30px rgba(69,144,255,.4)}
+.btn-dark{background:var(--bh-dark);color:#fff;border:1px solid rgba(255,255,255,.1)}.btn-dark:hover{box-shadow:0 8px 30px rgba(0,0,0,.5)}
+.btn-outline-p{background:transparent;color:var(--bh-primary);border:2px solid var(--bh-primary)}.btn-outline-p:hover{background:rgba(27,0,226,.08)}
+.btn-outline-a{background:transparent;color:var(--bh-azure);border:2px solid var(--bh-azure)}.btn-outline-a:hover{background:rgba(0,87,255,.08)}
+.btn-ghost{background:transparent;color:var(--bh-sky)}.btn-ghost:hover{background:rgba(69,144,255,.08)}
+.btn-danger{background:#DC2626;color:#fff}.btn-danger:hover{box-shadow:0 8px 30px rgba(220,38,38,.4)}
+
+/* ═══ 02 — GRADIENT BUTTONS ═══ */
+.btn-grad-ocean{background:linear-gradient(135deg,var(--bh-azure),var(--bh-sky));color:#fff}.btn-grad-ocean:hover{box-shadow:0 8px 30px rgba(0,87,255,.4)}
+.btn-grad-violet{background:linear-gradient(135deg,var(--bh-primary),var(--bh-azure));color:#fff}.btn-grad-violet:hover{box-shadow:0 8px 30px rgba(27,0,226,.4)}
+.btn-grad-deep{background:linear-gradient(135deg,var(--bh-dark),var(--bh-primary));color:#fff}
+.btn-grad-electric{background:linear-gradient(135deg,var(--bh-primary),var(--bh-sky));color:#fff}.btn-grad-electric:hover{box-shadow:0 8px 30px rgba(27,0,226,.3)}
+.btn-grad-midnight{background:linear-gradient(135deg,var(--bh-dark),var(--bh-azure));color:#fff}
+.btn-grad-aurora{background:linear-gradient(135deg,var(--bh-primary),var(--bh-azure),var(--bh-sky));color:#fff}.btn-grad-aurora:hover{box-shadow:0 8px 30px rgba(69,144,255,.3)}
+
+/* ═══ 03 — LIQUID GLASS ═══ */
+.btn-glass{
+  background:rgba(255,255,255,.2);color:var(--bh-dark);
+  border:1px solid rgba(255,255,255,.4);
+  backdrop-filter:blur(16px) saturate(180%);-webkit-backdrop-filter:blur(16px) saturate(180%);
+  box-shadow:inset 0 2px 10px rgba(255,255,255,.2),inset 0 -1px 4px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.1);
+}
+.btn-glass:hover{background:rgba(255,255,255,.3);border-color:rgba(255,255,255,.5);box-shadow:inset 0 2px 12px rgba(255,255,255,.25),inset 0 -1px 4px rgba(0,0,0,.08),0 8px 32px rgba(0,0,0,.15);color:var(--bh-dark)}
+.btn-glass-blue{
+  background:rgba(0,87,255,.15);color:var(--bh-dark);
+  border:1px solid rgba(0,87,255,.35);
+  backdrop-filter:blur(16px) saturate(180%);-webkit-backdrop-filter:blur(16px) saturate(180%);
+  box-shadow:inset 0 2px 10px rgba(69,144,255,.15),0 4px 16px rgba(0,0,0,.1);
+}
+.btn-glass-blue:hover{background:rgba(0,87,255,.22);border-color:rgba(0,87,255,.5);box-shadow:inset 0 2px 12px rgba(69,144,255,.2),0 0 24px rgba(0,87,255,.2)}
+.btn-glass-neon{
+  background:rgba(27,0,226,.12);color:var(--bh-dark);
+  border:1.5px solid var(--bh-primary);
+  backdrop-filter:blur(16px) saturate(180%);-webkit-backdrop-filter:blur(16px) saturate(180%);
+  box-shadow:0 0 20px rgba(27,0,226,.25),0 0 40px rgba(27,0,226,.1);
+}
+.btn-glass-neon:hover{box-shadow:0 0 28px rgba(27,0,226,.4),0 0 56px rgba(27,0,226,.15);background:rgba(27,0,226,.18)}
+.btn-liquid{
+  background:rgba(255,255,255,.18);color:var(--bh-dark);
+  border:1.5px solid rgba(255,255,255,.35);
+  backdrop-filter:blur(16px) saturate(180%);-webkit-backdrop-filter:blur(16px) saturate(180%);
+  box-shadow:inset 0 3px 12px rgba(255,255,255,.2),inset 0 -2px 6px rgba(0,0,0,.06),0 8px 32px rgba(0,0,0,.12);
+  border-radius:24px;
+}
+.btn-liquid:hover{background:rgba(255,255,255,.28);border-color:rgba(255,255,255,.45);box-shadow:inset 0 3px 16px rgba(255,255,255,.25),inset 0 -2px 8px rgba(0,0,0,.08),0 12px 40px rgba(0,0,0,.18);color:var(--bh-dark)}
+.btn-liquid-xl{height:80px;padding:0 2.5rem;font-size:1.25rem;border-radius:32px}
+.btn-liquid-circle{width:64px;height:64px;padding:0;border-radius:50%;justify-content:center}
+
+/* ═══ CARDS ═══ */
+.card{border-radius:16px;padding:1.75rem;transition:transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s}
+.card:hover{transform:translateY(-4px)}
+.card-label{font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.75rem}
+.card h3{font-size:1.25rem;font-weight:700;margin-bottom:.25rem}
+.card .sub{font-size:.85rem;color:rgba(255,255,255,.45);margin-bottom:1.25rem}
+.card .stats{display:flex;gap:1.5rem;margin-bottom:1.25rem}
+.card .stat-l{font-size:.6rem;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.1em}
+.card .stat-v{font-size:.9rem;font-weight:600;margin-top:.15rem}
+.card .actions{display:flex;gap:.5rem;margin-top:1rem}
+
+/* Solid card */
+.card-solid{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}
+.card-solid:hover{box-shadow:0 16px 48px rgba(0,0,0,.3)}
+.card-solid.c-primary{border-color:rgba(27,0,226,.3);background:rgba(27,0,226,.06)}
+.card-solid.c-primary .card-label{color:var(--bh-primary)}
+.card-solid.c-azure{border-color:rgba(0,87,255,.3);background:rgba(0,87,255,.06)}
+.card-solid.c-azure .card-label{color:var(--bh-azure)}
+.card-solid.c-sky{border-color:rgba(69,144,255,.3);background:rgba(69,144,255,.06)}
+.card-solid.c-sky .card-label{color:var(--bh-sky)}
+.card-solid.c-dark{border-color:rgba(255,255,255,.06);background:rgba(3,28,64,.6)}
+.card-solid.c-dark .card-label{color:rgba(255,255,255,.4)}
+
+/* Gradient card */
+.card-grad{position:relative;overflow:hidden;border:none}
+.card-grad::before{content:'';position:absolute;inset:0;border-radius:inherit;opacity:.15;z-index:0}
+.card-grad>*{position:relative;z-index:1}
+.card-grad.cg-ocean::before{background:linear-gradient(135deg,var(--bh-azure),var(--bh-sky))}
+.card-grad.cg-violet::before{background:linear-gradient(135deg,var(--bh-primary),var(--bh-azure))}
+.card-grad.cg-electric::before{background:linear-gradient(135deg,var(--bh-primary),var(--bh-sky))}
+.card-grad.cg-midnight::before{background:linear-gradient(135deg,var(--bh-dark),var(--bh-azure))}
+.card-grad{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)}
+.card-grad:hover{box-shadow:0 16px 48px rgba(0,0,0,.35)}
+.card-grad .card-label{color:var(--bh-sky)}
+
+/* Glass card — Apple Liquid Glass 3-layer */
+.card-glass{
+  background:rgba(255,255,255,.22);
+  border:1px solid rgba(255,255,255,.4);
+  border-radius:20px;
+  backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
+  box-shadow:
+    inset 0 4px 20px rgba(255,255,255,.2),
+    inset 0 -2px 8px rgba(0,0,0,.06),
+    0 8px 32px rgba(0,0,0,.12);
+  position:relative;overflow:hidden;
+}
+.card-glass::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  background:rgba(255,255,255,.08);
+  box-shadow:
+    inset -10px -8px 0px -11px rgba(255,255,255,.5),
+    inset 0px -9px 0px -8px rgba(255,255,255,.3);
+  opacity:.5;
+  filter:blur(1px) brightness(115%);
+  pointer-events:none;z-index:0;
+}
+.card-glass>*{position:relative;z-index:1}
+.card-glass:hover{
+  background:rgba(255,255,255,.3);
+  border-color:rgba(255,255,255,.5);
+  box-shadow:
+    inset 0 4px 24px rgba(255,255,255,.25),
+    inset 0 -2px 10px rgba(0,0,0,.08),
+    0 16px 48px rgba(0,0,0,.18);
+}
+.card-glass .card-label{color:var(--bh-primary);font-weight:700;text-shadow:0 0 10px rgba(69,144,255,.4),0 0 20px rgba(0,87,255,.2)}
+.card-glass h3{color:var(--bh-dark);text-shadow:0 0 16px rgba(69,144,255,.25),0 0 32px rgba(0,87,255,.1)}
+.card-glass .sub{color:rgba(3,28,64,.6)}
+.card-glass .stat-l{color:rgba(3,28,64,.5)}
+.card-glass .stat-v{color:var(--bh-dark)}
+
+/* ── Divider ── */
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);margin:2rem 0}
+
+/* ── Marquee ── */
+.marquee-track{overflow:hidden;padding:2rem 0;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06)}
+.marquee-inner{display:flex;gap:2rem;white-space:nowrap;will-change:transform}
+.marquee-word{font-size:clamp(3rem,8vw,7rem);font-weight:700;color:rgba(255,255,255,.06);flex-shrink:0}
+.marquee-word.filled{background:linear-gradient(135deg,var(--bh-primary),var(--bh-sky));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+/* ── Kinetic section ── */
+.kinetic{min-height:50vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:visible;padding:3rem 2rem}
+.split-heading{font-size:clamp(4rem,10vw,9rem);font-weight:700;line-height:1.15;display:flex;flex-wrap:wrap;justify-content:center;gap:0;overflow:visible;padding-bottom:.1em;transition:transform .2s ease-out,text-shadow .3s ease-out}
+.split-heading .char{display:inline-block;overflow:visible;opacity:0;transform:translateY(80px) rotateX(90deg);transition:opacity .5s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
+.split-heading.visible .char{opacity:1;transform:translateY(0) rotateX(0)}
+.split-heading .word{display:inline-flex;margin:0 .12em;overflow:visible}
+
+/* ── Scroll glow behind kinetic text ── */
+.scroll-glow{
+  position:absolute;width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(69,144,255,.5) 0%,rgba(0,87,255,.3) 30%,rgba(69,144,255,.12) 55%,transparent 70%);
+  pointer-events:none;left:50%;top:50%;transform:translate(-50%,-50%);
+  opacity:0;filter:blur(40px);transition:none;
+}
+
+/* ── Liquid blobs ── */
+.liquid-container{position:absolute;inset:0;overflow:hidden}
+.liquid-blob{position:absolute;border-radius:40% 60% 50% 50%/50% 40% 60% 50%;filter:blur(50px);opacity:.4}
+@keyframes lm{0%{border-radius:40% 60% 50% 50%/50% 40% 60% 50%;transform:translate(0,0) rotate(0)}25%{border-radius:50% 40% 60% 50%/40% 60% 40% 60%;transform:translate(20px,-15px) rotate(5deg)}50%{border-radius:60% 50% 40% 60%/60% 50% 50% 40%;transform:translate(-10px,20px) rotate(-3deg)}75%{border-radius:45% 55% 55% 45%/55% 45% 55% 45%;transform:translate(15px,10px) rotate(4deg)}100%{border-radius:40% 60% 50% 50%/50% 40% 60% 50%;transform:translate(0,0) rotate(0)}}
+
+/* ── Photo background for glass section ── */
+.glass-section-wrap{
+  position:relative;overflow:hidden;
+}
+.glass-section-wrap>.section{position:relative;z-index:1}
+
+/* Photo patch behind glass component groups */
+.photo-patch{
+  position:relative;overflow:hidden;border-radius:24px;
+}
+.photo-patch::before{
+  content:'';position:absolute;inset:-4px;z-index:0;
+  background:var(--patch-bg, url('bh-lounge.jpg')) center/cover no-repeat;
+  transform:scale(1.02);
+}
+.photo-patch::after{
+  content:'';position:absolute;inset:0;z-index:0;
+  border-radius:inherit;
+  background:rgba(3,28,64,.15);
+}
+.photo-patch>*{position:relative;z-index:1}
+.photo-patch .btn-row-label{color:var(--bh-dark);opacity:.5}
+.photo-patch-lobby::before{background:url('bh-lobby.jpg') center/cover no-repeat}
+
+/* ── Footer ── */
+footer{text-align:center;padding:3rem 2rem;color:rgba(255,255,255,.2);font-size:.7rem;letter-spacing:.15em}
+
+/* ═══ Fixed Background ═══ */
+.page-bg{position:fixed;inset:0;z-index:-1;background:#031C40;overflow:hidden}
+.page-bg .bg-blob{position:absolute;border-radius:50%;filter:blur(120px);opacity:.3}
+
+/* ═══ Scroll Lag ═══ */
+.scroll-lag{will-change:transform;transition:transform .15s cubic-bezier(.16,1,.3,1)}
+</style>
+</head>
+<body>
+
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<div class="page-bg">
+  <div class="bg-blob" style="width:50vw;height:50vw;background:#1B00E2;top:-10%;left:-10%;animation:af 20s ease-in-out infinite alternate"></div>
+  <div class="bg-blob" style="width:40vw;height:40vw;background:#0057FF;bottom:-5%;right:-5%;animation:af 25s ease-in-out infinite alternate-reverse"></div>
+  <div class="bg-blob" style="width:35vw;height:35vw;background:#4590FF;top:40%;left:60%;animation:af 18s ease-in-out infinite alternate;animation-delay:-8s"></div>
+  <div class="bg-blob" style="width:30vw;height:30vw;background:#031C40;top:60%;left:20%;animation:af 22s ease-in-out infinite alternate-reverse;animation-delay:-5s"></div>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="hero-content scroll-lag">
+    <svg style="width:220px;height:220px;margin-bottom:1rem;opacity:0;animation:fu .8s .1s forwards;transform:translateY(30px)" viewBox="0 0 966.13 389.97" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fff"/><stop offset="50%" stop-color="#4590FF"/><stop offset="100%" stop-color="#1B00E2"/></linearGradient><clipPath id="lc"><rect x="27.55" y="10.2" width="911.03" height="369.58"/></clipPath></defs><g clip-path="url(#lc)"><path fill="url(#lg)" d="M938.58,194.89c0-20.1-16.29-36.39-36.39-36.39h-84.7V49.77c0-20.1-16.29-36.39-36.39-36.39s-36.39,16.29-36.39,36.39v108.73h-151.92V49.77c0-20.1-16.29-36.39-36.39-36.39s-36.39,16.29-36.39,36.39v290.24c0,20.09,16.29,36.39,36.39,36.39s36.39-16.29,36.39-36.39v-108.74h151.92v108.74c0,20.09,16.29,36.39,36.39,36.39s36.39-16.29,36.39-36.39v-108.74h84.7c20.09,0,36.39-16.29,36.39-36.39"/><path fill="url(#lg)" d="M339.09,10.2h-158.87c-19.18,0-34.74,16.12-34.74,35.98s15.56,35.95,34.74,35.95h158.87c21.34,0,38.68,17.25,38.68,38.43s-17.35,38.43-38.68,38.43l-276.8.03c-19.2.03-34.74,16.12-34.74,35.98s15.56,35.98,34.74,35.98h276.8c21.34,0,38.68,17.22,38.68,38.39s-17.35,38.43-38.68,38.43h-158.87c-19.18,0-34.74,16.12-34.74,35.98s15.56,35.98,34.74,35.98h158.87c59.64,0,108.17-49.53,108.17-110.4,0-28.65-10.76-54.75-28.36-74.41,17.6-19.63,28.36-45.77,28.36-74.41,0-60.83-48.53-110.36-108.17-110.36"/></g></svg>
+    <h1>Button &amp; Card<br>Showcase</h1>
+    <p>Component systems by BIOMETRICS HOUSE</p>
+  </div>
+</div>
+
+<!-- ═══ MARQUEE ═══ -->
+<div class="marquee-track"><div class="marquee-inner" id="marquee1"><span class="marquee-word filled">BUTTONS</span><span class="marquee-word">CARDS</span><span class="marquee-word filled">COMPONENTS</span><span class="marquee-word">SOLID</span><span class="marquee-word filled">GRADIENT</span><span class="marquee-word">GLASS</span><span class="marquee-word filled">PREMIUM</span><span class="marquee-word">2026</span><img src="bh-logo-white.svg" alt="BH" style="height:clamp(3rem,8vw,7rem);flex-shrink:0;opacity:.5"></div></div>
+
+<!-- ═══ KINETIC: SOLID CORE ═══ -->
+<div class="kinetic" id="solidCoreSection"><div class="scroll-glow" id="solidCoreGlow"></div><div class="split-heading scroll-lag reveal" id="splitSolid" data-text="SOLID CORE" style="position:relative;z-index:2"></div></div>
+
+<!-- ═══════════════════════════════════════════
+     01 — SOLID BUTTONS & CARDS
+     ═══════════════════════════════════════════ -->
+<div class="section">
+  <div class="reveal-stagger reveal">
+    <div class="section-label">01 — Solid</div>
+    <div class="section-title scroll-lag">Solid Buttons</div>
+    <div class="section-desc">Single-color buttons built on the four Biometrics House brand colors. Clean, direct, accessible.</div>
+  </div>
+
+  <div class="btn-row stagger reveal">
+    <div class="btn-row-label si">Primary &bull; Azure &bull; Sky &bull; Dark</div>
+    <button class="btn btn-primary si"><svg viewBox="0 0 24 24"><path d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"/></svg> Primary</button>
+    <button class="btn btn-azure si"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Azure</button>
+    <button class="btn btn-sky si"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg> Sky</button>
+    <button class="btn btn-dark si"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Dark</button>
+  </div>
+
+  <div class="btn-row stagger reveal">
+    <div class="btn-row-label si">Outline &bull; Ghost &bull; Danger</div>
+    <button class="btn btn-outline-p si">Outline Primary</button>
+    <button class="btn btn-outline-a si">Outline Azure</button>
+    <button class="btn btn-ghost si">Ghost</button>
+    <button class="btn btn-danger si"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg> Delete</button>
+  </div>
+
+  <div class="btn-row stagger reveal">
+    <div class="btn-row-label si">Large &bull; Pill &bull; Icon</div>
+    <button class="btn btn-lg btn-primary si">Large Primary</button>
+    <button class="btn btn-lg btn-pill btn-azure si">Pill Azure</button>
+    <button class="btn btn-icon btn-primary si"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+    <button class="btn btn-icon btn-azure si"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+    <button class="btn btn-icon btn-sky si"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></button>
+    <button class="btn btn-icon btn-dark si"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></button>
+  </div>
+
+  <div class="card-grid stagger reveal">
+    <div class="card scroll-lag card-solid c-primary si">
+      <div class="card-label">Primary #1B00E2</div>
+      <h3>Biometric Scanner</h3>
+      <div class="sub">Facial recognition module v3.2</div>
+      <div class="stats"><div><div class="stat-l">Accuracy</div><div class="stat-v" style="color:var(--bh-primary)">99.7%</div></div><div><div class="stat-l">Scans Today</div><div class="stat-v">2,847</div></div><div><div class="stat-l">Status</div><div class="stat-v" style="color:#059669">Active</div></div></div>
+      <div class="actions"><button class="btn btn-primary">Start Scan</button><button class="btn btn-outline-p">Details</button></div>
+    </div>
+    <div class="card scroll-lag card-solid c-azure si">
+      <div class="card-label">Azure #0057FF</div>
+      <h3>Access Control</h3>
+      <div class="sub">Zone B — Main Entrance</div>
+      <div class="stats"><div><div class="stat-l">Entries</div><div class="stat-v" style="color:var(--bh-azure)">1,243</div></div><div><div class="stat-l">Denied</div><div class="stat-v" style="color:#DC2626">7</div></div><div><div class="stat-l">Uptime</div><div class="stat-v" style="color:#059669">99.9%</div></div></div>
+      <div class="actions"><button class="btn btn-azure">Manage</button><button class="btn btn-outline-a">Log</button></div>
+    </div>
+    <div class="card scroll-lag card-solid c-sky si">
+      <div class="card-label">Sky #4590FF</div>
+      <h3>Network Monitor</h3>
+      <div class="sub">Real-time bandwidth analytics</div>
+      <div class="stats"><div><div class="stat-l">Latency</div><div class="stat-v" style="color:var(--bh-sky)">12ms</div></div><div><div class="stat-l">Throughput</div><div class="stat-v">8.4 Gbps</div></div><div><div class="stat-l">Nodes</div><div class="stat-v">48</div></div></div>
+      <div class="actions"><button class="btn btn-sky">Dashboard</button><button class="btn btn-ghost">Export</button></div>
+    </div>
+    <div class="card scroll-lag card-solid c-dark si">
+      <div class="card-label">Dark #031C40</div>
+      <h3>System Health</h3>
+      <div class="sub">Infrastructure monitoring</div>
+      <div class="stats"><div><div class="stat-l">CPU</div><div class="stat-v">23%</div></div><div><div class="stat-l">Memory</div><div class="stat-v">67%</div></div><div><div class="stat-l">Disk</div><div class="stat-v">41%</div></div></div>
+      <div class="actions"><button class="btn btn-dark">View Details</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ KINETIC: GRADIENT FLOW ═══ -->
+<div class="kinetic" id="gradFlowSection"><div class="scroll-glow" id="gradFlowGlow"></div><div class="split-heading scroll-lag reveal" id="splitGrad" data-text="GRADIENT FLOW" style="position:relative;z-index:2"></div></div>
+
+<!-- ═══════════════════════════════════════════
+     02 — GRADIENT BUTTONS & CARDS
+     ═══════════════════════════════════════════ -->
+<div class="section">
+  <div class="reveal-stagger reveal">
+    <div class="section-label">02 — Gradient</div>
+    <div class="section-title scroll-lag">Gradient Buttons</div>
+    <div class="section-desc">Multi-color gradient buttons combining the BH brand palette for premium, eye-catching actions.</div>
+  </div>
+
+  <div class="btn-row stagger reveal">
+    <div class="btn-row-label si">Standard</div>
+    <button class="btn btn-grad-ocean si"><svg viewBox="0 0 24 24"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></svg> Ocean</button>
+    <button class="btn btn-grad-violet si"><svg viewBox="0 0 24 24"><path d="M15 4V2M15 16v-2M8 9h2M20 9h2M17.8 11.8L19 13M15 9h0M17.8 6.2L19 5M11 6.2L9.7 5"/></svg> Violet</button>
+    <button class="btn btn-grad-deep si">Deep Blue</button>
+    <button class="btn btn-grad-electric si"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Electric</button>
+    <button class="btn btn-grad-midnight si">Midnight</button>
+    <button class="btn btn-grad-aurora si">Aurora</button>
+  </div>
+
+  <div class="btn-row stagger reveal">
+    <div class="btn-row-label si">Large &bull; Pill &bull; Icon</div>
+    <button class="btn btn-lg btn-grad-electric si">Large Electric</button>
+    <button class="btn btn-lg btn-pill btn-grad-ocean si">Pill Ocean</button>
+    <button class="btn btn-lg btn-pill btn-grad-aurora si">Pill Aurora</button>
+    <button class="btn btn-icon btn-lg btn-grad-violet si"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></button>
+    <button class="btn btn-icon btn-grad-ocean si"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+  </div>
+
+  <div class="card-grid stagger reveal">
+    <div class="card scroll-lag card-grad cg-ocean si">
+      <div class="card-label">Ocean Gradient</div>
+      <h3>Analytics Dashboard</h3>
+      <div class="sub">Real-time data visualization</div>
+      <div class="stats"><div><div class="stat-l">Visitors</div><div class="stat-v" style="color:var(--bh-sky)">24.5K</div></div><div><div class="stat-l">Conversion</div><div class="stat-v">3.2%</div></div><div><div class="stat-l">Revenue</div><div class="stat-v">$84K</div></div></div>
+      <div class="actions"><button class="btn btn-grad-ocean">View Report</button><button class="btn btn-ghost">Export</button></div>
+    </div>
+    <div class="card scroll-lag card-grad cg-violet si">
+      <div class="card-label">Violet Gradient</div>
+      <h3>AI Processing</h3>
+      <div class="sub">Neural network inference engine</div>
+      <div class="stats"><div><div class="stat-l">Models</div><div class="stat-v" style="color:var(--bh-primary)">12</div></div><div><div class="stat-l">Accuracy</div><div class="stat-v">98.4%</div></div><div><div class="stat-l">Latency</div><div class="stat-v">8ms</div></div></div>
+      <div class="actions"><button class="btn btn-grad-violet">Train Model</button><button class="btn btn-outline-p">Configure</button></div>
+    </div>
+    <div class="card scroll-lag card-grad cg-electric si">
+      <div class="card-label">Electric Gradient</div>
+      <h3>Threat Detection</h3>
+      <div class="sub">Anomaly scanning in real-time</div>
+      <div class="stats"><div><div class="stat-l">Alerts</div><div class="stat-v" style="color:#DC2626">3</div></div><div><div class="stat-l">Scanned</div><div class="stat-v">1.2M</div></div><div><div class="stat-l">Blocked</div><div class="stat-v">847</div></div></div>
+      <div class="actions"><button class="btn btn-grad-electric">Review Alerts</button></div>
+    </div>
+    <div class="card scroll-lag card-grad cg-midnight si">
+      <div class="card-label">Midnight Gradient</div>
+      <h3>Deployment Pipeline</h3>
+      <div class="sub">CI/CD automation status</div>
+      <div class="stats"><div><div class="stat-l">Builds</div><div class="stat-v">342</div></div><div><div class="stat-l">Success</div><div class="stat-v" style="color:#059669">99.1%</div></div><div><div class="stat-l">Avg Time</div><div class="stat-v">2m 14s</div></div></div>
+      <div class="actions"><button class="btn btn-grad-midnight">Deploy</button><button class="btn btn-ghost">History</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ KINETIC: IRIS SURFACE ═══ -->
+<div class="kinetic" id="irisSurfaceSection"><div class="scroll-glow" id="irisSurfaceGlow"></div><div class="split-heading scroll-lag reveal" id="splitIris" data-text="IRIS SURFACE" style="position:relative;z-index:2"></div></div>
+
+<!-- ═══════════════════════════════════════════
+     03 — LIQUID GLASS BUTTONS & CARDS
+     ═══════════════════════════════════════════ -->
+<div class="glass-section-wrap">
+<div class="section">
+  <div class="reveal-stagger reveal">
+    <div class="section-label">03 — Liquid Glass</div>
+    <div class="section-title scroll-lag">Premium Glass Collection</div>
+    <div class="section-desc">Apple-inspired liquid glass material with frosted blur, bevel shadows, and light refraction effects.</div>
+  </div>
+
+  <div class="photo-patch stagger reveal" style="padding:2rem;margin-bottom:1.5rem">
+    <div class="btn-row" style="margin-bottom:1.5rem">
+      <div class="btn-row-label si">Liquid Glass XL</div>
+      <button class="btn btn-liquid btn-liquid-xl si"><svg viewBox="0 0 24 24" style="width:24px;height:24px"><path d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"/></svg> Glass Button</button>
+      <button class="btn btn-liquid btn-liquid-circle si"><svg viewBox="0 0 24 24" style="width:28px;height:28px"><polygon points="5 3 19 12 5 21 5 3"/></svg></button>
+      <button class="btn btn-liquid btn-liquid-circle si"><svg viewBox="0 0 24 24" style="width:24px;height:24px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></button>
+    </div>
+
+    <div class="btn-row" style="margin-bottom:1.5rem">
+      <div class="btn-row-label si">Glass &bull; Glass Blue &bull; Neon &bull; Liquid</div>
+    <button class="btn btn-glass si"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg> Glass</button>
+    <button class="btn btn-glass-blue si"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Glass Blue</button>
+    <button class="btn btn-glass-neon si"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Neon</button>
+    <button class="btn btn-liquid si" style="height:44px;padding:0 1.25rem">Liquid</button>
+    </div>
+
+    <div class="btn-row">
+      <div class="btn-row-label si">Large &bull; Pill &bull; Icon</div>
+      <button class="btn btn-lg btn-glass si">Large Glass</button>
+      <button class="btn btn-lg btn-pill btn-glass-blue si">Pill Blue</button>
+      <button class="btn btn-icon btn-glass si"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+      <button class="btn btn-icon btn-glass si"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+      <button class="btn btn-icon btn-glass-neon si"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+      <button class="btn btn-icon btn-lg btn-liquid si" style="border-radius:50%"><svg viewBox="0 0 24 24" style="width:22px;height:22px"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></button>
+    </div>
+  </div>
+
+  <div class="photo-patch photo-patch-lobby stagger reveal" style="padding:1.5rem;margin-top:1.5rem">
+    <div class="card-grid">
+    <div class="card scroll-lag card-glass si">
+      <div class="card-label">Liquid Glass</div>
+      <h3>Biometric Scanner</h3>
+      <div class="sub">Facial recognition module</div>
+      <div class="stats"><div><div class="stat-l">Status</div><div class="stat-v">Active</div></div><div><div class="stat-l">Accuracy</div><div class="stat-v">99.7%</div></div><div><div class="stat-l">Scans</div><div class="stat-v">2,847</div></div></div>
+      <div class="actions"><button class="btn btn-glass"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg> Live Feed</button><button class="btn btn-liquid" style="height:44px;padding:0 1.25rem">Start Scan</button></div>
+    </div>
+    <div class="card scroll-lag card-glass si">
+      <div class="card-label">Liquid Glass</div>
+      <h3>Access Control</h3>
+      <div class="sub">Zone B — Main Entrance</div>
+      <div class="stats"><div><div class="stat-l">Entries</div><div class="stat-v">1,243</div></div><div><div class="stat-l">Denied</div><div class="stat-v" style="color:#B91C1C">7</div></div><div><div class="stat-l">Uptime</div><div class="stat-v" style="color:#047857">99.9%</div></div></div>
+      <div class="actions"><button class="btn btn-glass"><svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg> Log</button><button class="btn btn-liquid" style="height:44px;padding:0 1.25rem"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Manage</button></div>
+    </div>
+    <div class="card scroll-lag card-glass si">
+      <div class="card-label">Liquid Glass</div>
+      <h3>System Health</h3>
+      <div class="sub">Infrastructure monitoring</div>
+      <div style="margin-bottom:1rem">
+        <div style="display:flex;justify-content:space-between;font-size:.75rem;margin-bottom:.25rem"><span style="color:rgba(255,255,255,.4)">CPU</span><span style="color:rgba(255,255,255,.6)">23%</span></div>
+        <div style="height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden"><div style="width:23%;height:100%;background:linear-gradient(90deg,var(--bh-primary),var(--bh-sky));border-radius:3px"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:.75rem;margin:.5rem 0 .25rem"><span style="color:rgba(255,255,255,.4)">Memory</span><span style="color:rgba(255,255,255,.6)">67%</span></div>
+        <div style="height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden"><div style="width:67%;height:100%;background:linear-gradient(90deg,var(--bh-azure),var(--bh-primary));border-radius:3px"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:.75rem;margin:.5rem 0 .25rem"><span style="color:rgba(255,255,255,.4)">Network</span><span style="color:rgba(255,255,255,.6)">Active</span></div>
+        <div style="height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden"><div style="width:92%;height:100%;background:linear-gradient(90deg,var(--bh-sky),var(--bh-azure));border-radius:3px"></div></div>
+      </div>
+      <div class="actions"><button class="btn btn-liquid" style="height:44px;padding:0 1.25rem">View Details</button></div>
+    </div>
+    <div class="card scroll-lag card-glass si" style="position:relative;overflow:hidden">
+      <div class="liquid-container" style="z-index:0;opacity:.3">
+        <div class="liquid-blob" style="width:60%;height:60%;background:var(--bh-primary);top:-20%;left:-10%;animation:lm 12s ease-in-out infinite"></div>
+        <div class="liquid-blob" style="width:50%;height:50%;background:var(--bh-sky);bottom:-15%;right:-10%;animation:lm 15s ease-in-out infinite reverse"></div>
+      </div>
+      <div style="position:relative;z-index:1">
+        <div class="card-label">Liquid Glass + Motion</div>
+        <h3>Threat Detection</h3>
+        <div class="sub">Anomaly scanning with AI</div>
+        <div class="stats"><div><div class="stat-l">Alerts</div><div class="stat-v" style="color:#B91C1C">3</div></div><div><div class="stat-l">Scanned</div><div class="stat-v">1.2M</div></div><div><div class="stat-l">Blocked</div><div class="stat-v">847</div></div></div>
+        <div class="actions"><button class="btn btn-glass-neon">Review</button><button class="btn btn-glass">Dismiss</button></div>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+</div><!-- /glass-section-wrap -->
+
+<!-- ═══ FINALE ═══ -->
+<div class="kinetic" style="min-height:70vh;position:relative">
+  <div class="liquid-container" style="z-index:-1">
+    <div class="liquid-blob" style="width:50%;height:60%;background:var(--bh-primary);top:-10%;left:10%;filter:blur(80px);opacity:.2;animation:lm 18s ease-in-out infinite"></div>
+    <div class="liquid-blob" style="width:40%;height:50%;background:var(--bh-azure);bottom:0;right:10%;filter:blur(80px);opacity:.15;animation:lm 14s ease-in-out infinite reverse"></div>
+    <div class="liquid-blob" style="width:30%;height:30%;background:var(--bh-sky);top:40%;left:40%;filter:blur(60px);opacity:.1;animation:lm 10s ease-in-out infinite"></div>
+  </div>
+  <div style="font-size:.65rem;font-weight:700;letter-spacing:.3em;color:var(--bh-sky);margin-bottom:2rem;position:relative;z-index:2">BIOMETRICS HOUSE</div>
+  <div style="font-size:clamp(3rem,7vw,6rem);font-weight:700;line-height:1;position:relative;z-index:2;text-align:center" class="reveal">
+    <div>Designed for</div>
+    <div style="background:linear-gradient(90deg,var(--bh-primary),var(--bh-sky));-webkit-background-clip:text;-webkit-text-fill-color:transparent">the future.</div>
+    <div>Built on blue.</div>
+  </div>
+  <p style="font-size:.85rem;color:rgba(255,255,255,.35);margin-top:3rem;position:relative;z-index:2" class="reveal">#1B00E2 &bull; #031C40 &bull; #0057FF &bull; #4590FF</p>
+</div>
+
+<footer>
+  <img src="bh-logo-white.svg" alt="BH" style="width:200px;height:200px;opacity:1;margin-bottom:1.5rem;display:block;margin-inline:auto">
+  &copy; 2026 BIOMETRICS HOUSE &bull; Button &amp; Card Showcase
+</footer>
+
+<script>
+// Progress bar
+const sp=document.getElementById('scrollProgress');
+function up(){const h=document.documentElement.scrollHeight-window.innerHeight;sp.style.width=(window.scrollY/h*100)+'%'}
+
+// Intersection Observer
+const obs=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting)en.target.classList.add('visible')})},{threshold:.1,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.reveal,.stagger').forEach(el=>obs.observe(el));
+
+// Split text — sky to white gradient (matching gradient trends)
+document.querySelectorAll('.split-heading[data-text]').forEach(el=>{
+  const t=el.dataset.text;el.innerHTML=t.split(' ').map(w=>'<span class="word">'+w.split('').map((c,i)=>`<span class="char" style="transition-delay:${i*.04}s;background:linear-gradient(135deg,var(--bh-sky),#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent">${c}</span>`).join('')+'</span>').join('');
+  obs.observe(el);
+});
+
+// Marquee
+let ls=0,m1=document.getElementById('marquee1'),mx=0;
+function um(){const d=window.scrollY-ls;ls=window.scrollY;mx-=d*.6;mx-=.3;if(m1)m1.style.transform=`translateX(${mx}px)`}
+
+// Scroll lag
+const lagEls = document.querySelectorAll('.scroll-lag');
+let smoothScroll = 0;
+function updateLag() {
+  smoothScroll += (window.scrollY - smoothScroll) * 0.08;
+  const delta = (window.scrollY - smoothScroll) * 0.03;
+  lagEls.forEach(el => {
+    el.style.transform = `translateY(${delta}px)`;
+  });
+}
+
+// Scroll glow + scale for kinetic sections
+function updateKineticGlow(sectionId, glowId, splitId) {
+  const section = document.getElementById(sectionId);
+  const glow = document.getElementById(glowId);
+  if (!section || !glow) return;
+  const rect = section.getBoundingClientRect();
+  const vh = window.innerHeight;
+  const center = rect.top + rect.height / 2;
+  const dist = Math.abs(center - vh / 2);
+  const proximity = Math.max(0, 1 - dist / (vh * 0.7));
+  const size = 300 + proximity * 600;
+  glow.style.width = size + 'px';
+  glow.style.height = size + 'px';
+  glow.style.opacity = proximity * 0.85;
+  glow.style.filter = `blur(${30 + proximity * 40}px)`;
+  const split = document.getElementById(splitId);
+  if (split) {
+    split.style.transform = `scale(${1 + proximity * 0.08})`;
+    const s = proximity * 40;
+    split.style.textShadow = `0 0 ${s}px rgba(69,144,255,${proximity * 0.5}), 0 0 ${s * 2}px rgba(0,87,255,${proximity * 0.2})`;
+  }
+}
+
+function updateAllGlows() {
+  updateKineticGlow('solidCoreSection', 'solidCoreGlow', 'splitSolid');
+  updateKineticGlow('gradFlowSection', 'gradFlowGlow', 'splitGrad');
+  updateKineticGlow('irisSurfaceSection', 'irisSurfaceGlow', 'splitIris');
+}
+
+// RAF
+function tick(){up();um();updateLag();updateAllGlows();requestAnimationFrame(tick)}
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>

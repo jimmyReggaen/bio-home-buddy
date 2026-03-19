@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biometrics House — 2026 Gradient Trends</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bh-primary:#1B00E2;
+  --bh-dark:#031C40;
+  --bh-azure:#0057FF;
+  --bh-sky:#4590FF;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Montserrat',sans-serif;background:#031C40;color:#fff;overflow-x:hidden}
+
+/* ═══════════════════════════════════════
+   HERO — Aurora Mesh
+   ═══════════════════════════════════════ */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;
+  position:relative;overflow:hidden;
+}
+.hero-aurora{
+  position:absolute;inset:0;
+  filter:blur(100px);opacity:.6;
+}
+.hero-aurora .blob{
+  position:absolute;border-radius:50%;
+  animation:auroraFloat 12s ease-in-out infinite alternate;
+}
+.hero-aurora .b1{width:500px;height:500px;background:var(--bh-primary);top:-10%;left:10%;animation-delay:0s}
+.hero-aurora .b2{width:400px;height:400px;background:var(--bh-dark);bottom:0;right:10%;animation-delay:-3s;animation-duration:15s}
+.hero-aurora .b3{width:350px;height:350px;background:var(--bh-azure);top:30%;left:50%;animation-delay:-6s;animation-duration:18s}
+.hero-aurora .b4{width:300px;height:300px;background:var(--bh-sky);top:60%;left:20%;animation-delay:-9s;animation-duration:14s}
+@keyframes auroraFloat{
+  0%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(40px,-30px) scale(1.1)}
+  66%{transform:translate(-30px,40px) scale(.95)}
+  100%{transform:translate(20px,-20px) scale(1.05)}
+}
+.hero-content{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center}
+.hero-label{font-size:.7rem;font-weight:700;letter-spacing:.35em;color:var(--bh-sky);margin-bottom:1rem;opacity:0;animation:fadeUp .8s .2s forwards}
+.hero h1{
+  font-size:clamp(2.5rem,7vw,5.5rem);font-weight:700;line-height:1;
+  background:linear-gradient(135deg,#fff 0%,var(--bh-sky) 50%,var(--bh-primary) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  opacity:0;animation:fadeUp .8s .4s forwards;
+}
+.hero p{font-size:1.1rem;color:var(--bh-sky);max-width:550px;margin:1.5rem auto 0;opacity:0;animation:fadeUp .8s .6s forwards}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+.hero-label,.hero h1,.hero p{transform:translateY(30px)}
+
+/* ═══════════════════════════════════════
+   GRADIENT TILES
+   ═══════════════════════════════════════ */
+.section{padding:3rem 2rem;max-width:1440px;margin:0 auto}
+.section:first-of-type{padding-top:2rem}
+.section-label{font-size:.65rem;font-weight:700;letter-spacing:.3em;color:var(--bh-sky);text-transform:uppercase;margin-bottom:.75rem}
+.section-title{font-size:clamp(1.8rem,4vw,3rem);font-weight:700;margin-bottom:.5rem}
+.section-desc{font-size:.95rem;color:rgba(255,255,255,.4);max-width:600px;margin-bottom:3rem}
+
+.grid{display:grid;gap:1.5rem}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:900px){.grid-3,.grid-4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}}
+
+.tile{
+  position:relative;border-radius:24px;overflow:hidden;
+  aspect-ratio:16/11;
+  cursor:pointer;
+  transition:transform .5s cubic-bezier(.16,1,.3,1),box-shadow .5s;
+}
+.tile:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.tile-tall{aspect-ratio:9/14}
+.tile-square{aspect-ratio:1}
+.tile-wide{aspect-ratio:21/9}
+
+.tile-info{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:1.25rem 1.5rem;
+  background:linear-gradient(0deg,rgba(0,0,0,.5) 0%,transparent 100%);
+  z-index:2;
+}
+.tile-name{font-size:.9rem;font-weight:700;color:#fff}
+.tile-tag{font-size:.6rem;font-weight:600;letter-spacing:.15em;color:rgba(255,255,255,.4);text-transform:uppercase;margin-top:.2rem}
+.tile-hex{display:flex;gap:.5rem;margin-top:.4rem;flex-wrap:wrap}
+.tile-hex span{font-size:.55rem;font-weight:600;letter-spacing:.05em;color:rgba(255,255,255,.5);padding:.15rem .4rem;border-radius:4px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04)}
+
+/* Reveal */
+.reveal{opacity:0;transform:translateY(50px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ═══════════════════════════════════════
+   01 — AURORA MESH GRADIENTS
+   ═══════════════════════════════════════ */
+.aurora-mesh{position:absolute;inset:0;filter:blur(60px)}
+.aurora-mesh .dot{position:absolute;border-radius:50%}
+
+/* Deep Ocean Aurora */
+.g-deep-ocean .dot:nth-child(1){width:60%;height:60%;background:var(--bh-primary);top:-10%;left:-10%;animation:meshA 10s ease-in-out infinite alternate}
+.g-deep-ocean .dot:nth-child(2){width:50%;height:50%;background:var(--bh-dark);bottom:-5%;right:-5%;animation:meshB 12s ease-in-out infinite alternate}
+.g-deep-ocean .dot:nth-child(3){width:40%;height:40%;background:rgba(69,144,255,.6);top:40%;left:50%;animation:meshC 14s ease-in-out infinite alternate}
+.g-deep-ocean{background:linear-gradient(135deg,#031C40,#031C40)}
+
+/* Midnight Pulse */
+.g-midnight-pulse .dot:nth-child(1){width:55%;height:55%;background:var(--bh-azure);top:10%;left:60%;animation:meshB 11s ease-in-out infinite alternate}
+.g-midnight-pulse .dot:nth-child(2){width:45%;height:45%;background:var(--bh-primary);bottom:10%;left:10%;animation:meshA 13s ease-in-out infinite alternate}
+.g-midnight-pulse .dot:nth-child(3){width:35%;height:35%;background:rgba(3,28,64,.9);top:50%;left:30%;animation:meshC 9s ease-in-out infinite alternate}
+.g-midnight-pulse{background:#031C40}
+
+/* Nordic Blue */
+.g-nordic .dot:nth-child(1){width:70%;height:50%;background:rgba(27,0,226,.4);top:-15%;right:-10%;animation:meshC 16s ease-in-out infinite alternate}
+.g-nordic .dot:nth-child(2){width:50%;height:60%;background:rgba(3,28,64,.8);bottom:-10%;left:-5%;animation:meshA 12s ease-in-out infinite alternate}
+.g-nordic .dot:nth-child(3){width:30%;height:30%;background:rgba(69,144,255,.25);top:50%;left:40%;animation:meshB 10s ease-in-out infinite alternate}
+.g-nordic{background:#031C40}
+
+/* Sapphire Glow */
+.g-sapphire .dot:nth-child(1){width:50%;height:50%;background:rgba(27,0,226,.5);top:0;left:0;animation:meshA 14s ease-in-out infinite alternate}
+.g-sapphire .dot:nth-child(2){width:60%;height:40%;background:rgba(0,87,255,.3);bottom:0;right:0;animation:meshB 11s ease-in-out infinite alternate}
+.g-sapphire .dot:nth-child(3){width:35%;height:35%;background:rgba(69,144,255,.3);top:30%;right:20%;animation:meshC 15s ease-in-out infinite alternate}
+.g-sapphire{background:#031C40}
+
+@keyframes meshA{0%{transform:translate(0,0) scale(1)}50%{transform:translate(30px,-20px) scale(1.15)}100%{transform:translate(-20px,30px) scale(.9)}}
+@keyframes meshB{0%{transform:translate(0,0) scale(1)}50%{transform:translate(-25px,35px) scale(1.1)}100%{transform:translate(35px,-15px) scale(.95)}}
+@keyframes meshC{0%{transform:translate(0,0) scale(1)}50%{transform:translate(20px,20px) scale(1.08)}100%{transform:translate(-15px,-25px) scale(1.12)}}
+
+/* ═══════════════════════════════════════
+   02 — SOFT FLOW GRADIENTS
+   ═══════════════════════════════════════ */
+.g-soft-flow{
+  position:relative;
+  background-size:200% 200%;
+  animation:softFlow 8s ease-in-out infinite;
+}
+@keyframes softFlow{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+.g-ocean-breeze{background:linear-gradient(135deg,#031C40,#1B00E2,#031C40,#4590FF);background-size:300% 300%;animation:softFlow 10s ease-in-out infinite}
+.g-twilight{background:linear-gradient(135deg,#031C40,#1B00E2,#0057FF,#031C40);background-size:300% 300%;animation:softFlow 12s ease-in-out infinite}
+.g-steel-wave{background:linear-gradient(135deg,#031C40,#0057FF,#031C40,#1B00E2);background-size:300% 300%;animation:softFlow 14s ease-in-out infinite}
+.g-frost-drift{background:linear-gradient(135deg,#031C40,#1B00E222,#031C40,#4590FF15);background-size:300% 300%;animation:softFlow 11s ease-in-out infinite}
+
+/* ═══════════════════════════════════════
+   03 — GRAIN + BLUR GRADIENTS
+   ═══════════════════════════════════════ */
+.grain-overlay::after{
+  content:'';position:absolute;inset:0;z-index:1;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity:.04;mix-blend-mode:overlay;pointer-events:none;
+}
+
+.g-grain-abyss{
+  background:radial-gradient(ellipse at 30% 20%,rgba(27,0,226,.3),transparent 60%),
+             radial-gradient(ellipse at 70% 80%,rgba(3,28,64,.8),transparent 60%),
+             #031C40;
+}
+.g-grain-nebula{
+  background:radial-gradient(ellipse at 60% 30%,rgba(69,144,255,.2),transparent 55%),
+             radial-gradient(ellipse at 30% 70%,rgba(27,0,226,.25),transparent 55%),
+             #031C40;
+}
+.g-grain-plasma{
+  background:radial-gradient(circle at 50% 50%,rgba(27,0,226,.25),transparent 50%),
+             radial-gradient(circle at 20% 80%,rgba(69,144,255,.15),transparent 40%),
+             radial-gradient(circle at 80% 20%,rgba(3,28,64,.6),transparent 40%),
+             #031C40;
+}
+.g-grain-ink{
+  background:radial-gradient(ellipse at 40% 40%,rgba(3,28,64,.9),transparent 60%),
+             radial-gradient(ellipse at 80% 60%,rgba(27,0,226,.15),transparent 50%),
+             #031C40;
+}
+
+/* Animated grain blobs */
+.grain-blob{position:absolute;border-radius:50%;filter:blur(80px);animation:grainPulse 8s ease-in-out infinite alternate}
+@keyframes grainPulse{0%{opacity:.3;transform:scale(1)}50%{opacity:.5;transform:scale(1.15)}100%{opacity:.3;transform:scale(.9)}}
+
+/* ═══════════════════════════════════════
+   04 — GLASSMORPHIC GRADIENTS
+   ═══════════════════════════════════════ */
+.glass-gradient{
+  position:relative;
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.05),0 8px 32px rgba(0,0,0,.3);
+}
+.glass-gradient::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);z-index:0;
+}
+
+/* ═══════════════════════════════════════
+   05 — RADIAL GLOW GRADIENTS
+   ═══════════════════════════════════════ */
+.g-glow-core{
+  background:radial-gradient(circle at 50% 50%,rgba(27,0,226,.4) 0%,rgba(3,28,64,.6) 40%,#031C40 70%);
+  animation:glowPulse 6s ease-in-out infinite;
+}
+.g-glow-beam{
+  background:radial-gradient(ellipse at 50% 0%,rgba(27,0,226,.35) 0%,transparent 50%),
+             radial-gradient(ellipse at 50% 100%,rgba(3,28,64,.5) 0%,transparent 50%),
+             #031C40;
+  animation:glowShift 8s ease-in-out infinite;
+}
+.g-glow-edge{
+  background:radial-gradient(ellipse at 0% 50%,rgba(27,0,226,.3) 0%,transparent 40%),
+             radial-gradient(ellipse at 100% 50%,rgba(0,87,255,.15) 0%,transparent 40%),
+             #031C40;
+  animation:glowShift 10s ease-in-out infinite;
+}
+.g-glow-corner{
+  background:radial-gradient(circle at 0% 0%,rgba(27,0,226,.35) 0%,transparent 40%),
+             radial-gradient(circle at 100% 100%,rgba(3,28,64,.5) 0%,transparent 40%),
+             #031C40;
+  animation:glowPulse 7s ease-in-out infinite;
+}
+@keyframes glowPulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.15)}}
+@keyframes glowShift{0%{background-position:0% 0%}50%{background-position:100% 100%}100%{background-position:0% 0%}}
+
+/* ═══════════════════════════════════════
+   06 — LIQUID MOTION
+   ═══════════════════════════════════════ */
+.liquid-container{position:absolute;inset:0;overflow:hidden}
+.liquid-blob{
+  position:absolute;border-radius:40% 60% 50% 50% / 50% 40% 60% 50%;
+  filter:blur(50px);opacity:.4;
+}
+.lb-1{
+  width:60%;height:60%;background:var(--bh-primary);top:-10%;left:-10%;
+  animation:liquidMorph 12s ease-in-out infinite;
+}
+.lb-2{
+  width:50%;height:50%;background:var(--bh-dark);bottom:-5%;right:-10%;
+  animation:liquidMorph 15s ease-in-out infinite reverse;
+}
+.lb-3{
+  width:35%;height:35%;background:var(--bh-sky);top:40%;left:50%;
+  animation:liquidMorph 10s ease-in-out infinite;animation-delay:-4s;
+}
+@keyframes liquidMorph{
+  0%{border-radius:40% 60% 50% 50% / 50% 40% 60% 50%;transform:translate(0,0) rotate(0deg)}
+  25%{border-radius:50% 40% 60% 50% / 40% 60% 40% 60%;transform:translate(20px,-15px) rotate(5deg)}
+  50%{border-radius:60% 50% 40% 60% / 60% 50% 50% 40%;transform:translate(-10px,20px) rotate(-3deg)}
+  75%{border-radius:45% 55% 55% 45% / 55% 45% 55% 45%;transform:translate(15px,10px) rotate(4deg)}
+  100%{border-radius:40% 60% 50% 50% / 50% 40% 60% 50%;transform:translate(0,0) rotate(0deg)}
+}
+
+/* ═══════════════════════════════════════
+   FULL-WIDTH SHOWCASE
+   ═══════════════════════════════════════ */
+.fullwidth{
+  width:100%;height:60vh;min-height:400px;
+  position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;
+}
+.fullwidth .content{position:relative;z-index:2}
+.fullwidth h2{font-size:clamp(2rem,5vw,4rem);font-weight:700;line-height:1.05}
+.fullwidth p{font-size:1rem;color:rgba(255,255,255,.45);margin-top:1rem;max-width:480px;margin-inline:auto}
+
+/* ═══════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════ */
+footer{text-align:center;padding:3rem 2rem;color:rgba(255,255,255,.2);font-size:.7rem;letter-spacing:.15em}
+
+/* ═══════════════════════════════════════
+   KINETIC TYPOGRAPHY
+   ═══════════════════════════════════════ */
+
+/* ── Scroll-driven horizontal marquee ── */
+.marquee-track{
+  overflow:hidden;padding:2.5rem 0;position:relative;
+  border-top:1px solid rgba(255,255,255,.06);
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.marquee-inner{
+  display:flex;gap:2rem;white-space:nowrap;
+  will-change:transform;
+}
+.marquee-word{
+  font-size:clamp(4rem,10vw,9rem);font-weight:700;
+  color:rgba(255,255,255,.08);
+  flex-shrink:0;
+  transition:color .4s;
+}
+.marquee-word.filled{
+  background:linear-gradient(135deg,var(--bh-primary),var(--bh-sky));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+
+/* ── Per-character split text ── */
+.kinetic-section{
+  min-height:60vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;position:relative;overflow:visible;
+  padding:3rem 2rem;
+}
+
+/* ── Scroll-driven glow behind kinetic text ── */
+.scroll-glow{
+  position:absolute;
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,
+    rgba(69,144,255,.5) 0%,
+    rgba(0,87,255,.3) 30%,
+    rgba(69,144,255,.12) 55%,
+    transparent 70%
+  );
+  pointer-events:none;
+  left:50%;top:50%;transform:translate(-50%,-50%);
+  opacity:0;
+  filter:blur(40px);
+  transition:none;
+}
+.split-heading{
+  font-size:clamp(4rem,10vw,9rem);font-weight:700;line-height:1.15;
+  display:flex;flex-wrap:wrap;justify-content:center;gap:0;
+  overflow:visible;
+  padding-bottom:.1em;
+  transition:transform .2s ease-out,text-shadow .3s ease-out;
+}
+.split-heading .char{
+  display:inline-block;
+  overflow:visible;
+  opacity:0;transform:translateY(80px) rotateX(90deg);
+  transition:opacity .5s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1);
+}
+.split-heading.visible .char{opacity:1;transform:translateY(0) rotateX(0)}
+.split-heading .word{display:inline-flex;margin:0 .15em;overflow:visible}
+
+/* ── Scroll progress bar ── */
+.scroll-progress{
+  position:fixed;top:0;left:0;height:3px;z-index:9999;
+  background:linear-gradient(90deg,var(--bh-primary),var(--bh-azure),var(--bh-sky));
+  width:0%;transition:width .05s linear;
+}
+
+/* ── Vertical reveal text ── */
+.vr-text{
+  font-size:clamp(3rem,7vw,6rem);font-weight:700;line-height:1;
+  overflow:hidden;
+}
+.vr-text .line{
+  display:block;overflow:hidden;
+}
+.vr-text .line-inner{
+  display:block;
+  transform:translateY(110%);
+  transition:transform .8s cubic-bezier(.16,1,.3,1);
+}
+.vr-text.visible .line-inner{transform:translateY(0)}
+.vr-text.visible .line:nth-child(2) .line-inner{transition-delay:.12s}
+.vr-text.visible .line:nth-child(3) .line-inner{transition-delay:.24s}
+
+/* ── Cursor proximity glow ── */
+.proximity-glow{
+  position:absolute;
+  width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,
+    rgba(27,0,226,.35) 0%,
+    rgba(0,87,255,.2) 30%,
+    rgba(69,144,255,.08) 55%,
+    transparent 70%
+  );
+  pointer-events:none;z-index:1;
+  transform:translate(-50%,-50%);
+  opacity:0;
+  transition:opacity .4s ease, width .4s ease, height .4s ease;
+  filter:blur(20px);
+}
+
+/* ── Stagger reveal for section headers ── */
+.reveal-stagger{opacity:0;transition:opacity .6s}
+.reveal-stagger.visible{opacity:1}
+.reveal-stagger.visible .section-label{animation:slideUp .6s .0s cubic-bezier(.16,1,.3,1) both}
+.reveal-stagger.visible .section-title{animation:slideUp .6s .1s cubic-bezier(.16,1,.3,1) both}
+.reveal-stagger.visible .section-desc{animation:slideUp .6s .2s cubic-bezier(.16,1,.3,1) both}
+@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══ Fixed Background ═══ */
+.page-bg{position:fixed;inset:0;z-index:-1;background:#031C40;overflow:hidden}
+.page-bg .bg-blob{position:absolute;border-radius:50%;filter:blur(120px);opacity:.3}
+
+/* ═══ Scroll Lag ═══ */
+.scroll-lag{will-change:transform;transition:transform .15s cubic-bezier(.16,1,.3,1)}
+</style>
+</head>
+<body>
+
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<div class="page-bg">
+  <div class="bg-blob" style="width:50vw;height:50vw;background:#1B00E2;top:-10%;left:-10%;animation:auroraFloat 20s ease-in-out infinite alternate"></div>
+  <div class="bg-blob" style="width:40vw;height:40vw;background:#0057FF;bottom:-5%;right:-5%;animation:auroraFloat 25s ease-in-out infinite alternate-reverse"></div>
+  <div class="bg-blob" style="width:35vw;height:35vw;background:#4590FF;top:40%;left:60%;animation:auroraFloat 18s ease-in-out infinite alternate;animation-delay:-8s"></div>
+  <div class="bg-blob" style="width:30vw;height:30vw;background:#031C40;top:60%;left:20%;animation:auroraFloat 22s ease-in-out infinite alternate-reverse;animation-delay:-5s"></div>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="hero-content scroll-lag">
+    <svg style="width:220px;height:220px;margin-bottom:1rem;opacity:0;animation:fadeUp .8s .1s forwards;transform:translateY(30px)" viewBox="0 0 966.13 389.97" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#fff"/>
+          <stop offset="50%" stop-color="#4590FF"/>
+          <stop offset="100%" stop-color="#1B00E2"/>
+        </linearGradient>
+        <clipPath id="lc"><rect x="27.55" y="10.2" width="911.03" height="369.58"/></clipPath>
+      </defs>
+      <g clip-path="url(#lc)">
+        <path fill="url(#logoGrad)" d="M938.58,194.89c0-20.1-16.29-36.39-36.39-36.39h-84.7V49.77c0-20.1-16.29-36.39-36.39-36.39s-36.39,16.29-36.39,36.39v108.73h-151.92V49.77c0-20.1-16.29-36.39-36.39-36.39s-36.39,16.29-36.39,36.39v290.24c0,20.09,16.29,36.39,36.39,36.39s36.39-16.29,36.39-36.39v-108.74h151.92v108.74c0,20.09,16.29,36.39,36.39,36.39s36.39-16.29,36.39-36.39v-108.74h84.7c20.09,0,36.39-16.29,36.39-36.39"/>
+        <path fill="url(#logoGrad)" d="M339.09,10.2h-158.87c-19.18,0-34.74,16.12-34.74,35.98s15.56,35.95,34.74,35.95h158.87c21.34,0,38.68,17.25,38.68,38.43s-17.35,38.43-38.68,38.43l-276.8.03c-19.2.03-34.74,16.12-34.74,35.98s15.56,35.98,34.74,35.98h276.8c21.34,0,38.68,17.22,38.68,38.39s-17.35,38.43-38.68,38.43h-158.87c-19.18,0-34.74,16.12-34.74,35.98s15.56,35.98,34.74,35.98h158.87c59.64,0,108.17-49.53,108.17-110.4,0-28.65-10.76-54.75-28.36-74.41,17.6-19.63,28.36-45.77,28.36-74.41,0-60.83-48.53-110.36-108.17-110.36"/>
+      </g>
+    </svg>
+    <h1>Gradient<br>Trends</h1>
+    <p>Gradient systems by BIOMETRICS HOUSE</p>
+  </div>
+</div>
+
+<!-- ═══ KINETIC: Scroll Marquee ═══ -->
+<div class="marquee-track">
+  <div class="marquee-inner" id="marquee1">
+    <span class="marquee-word filled">BIOMETRICS</span>
+    <span class="marquee-word">GRADIENTS</span>
+    <span class="marquee-word filled">2026</span>
+    <span class="marquee-word">BIOMETRICS</span>
+    <span class="marquee-word filled">GRADIENTS</span>
+    <span class="marquee-word">2026</span>
+    <span class="marquee-word filled">BIOMETRICS</span>
+    <span class="marquee-word">GRADIENTS</span>
+    <img src="bh-logo-white.svg" alt="BH" style="height:clamp(4rem,10vw,9rem);flex-shrink:0;opacity:.5"
+  </div>
+</div>
+
+<!-- ═══ 01 — AURORA MESH ═══ -->
+<div class="section">
+  <div class="reveal-stagger reveal">
+    <div class="section-label">01 — Aurora Mesh</div>
+    <div class="section-title scroll-lag">Mesh Gradient Aurora</div>
+    <div class="section-desc">Multi-point mesh gradients with gentle blob movement and blur effects. Inspired by the aurora borealis.</div>
+  </div>
+  <div class="grid grid-2">
+    <div class="tile g-deep-ocean reveal" style="transition-delay:.1s">
+      <div class="aurora-mesh"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+      <div class="tile-info"><div class="tile-name">Deep Ocean</div><div class="tile-tag">Aurora Mesh &bull; 3 blobs</div><div class="tile-hex"><span>#1B00E2</span><span>#031C40</span><span>#4590FF</span></div></div>
+    </div>
+    <div class="tile g-midnight-pulse reveal" style="transition-delay:.2s">
+      <div class="aurora-mesh"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+      <div class="tile-info"><div class="tile-name">Midnight Pulse</div><div class="tile-tag">Aurora Mesh &bull; 3 blobs</div><div class="tile-hex"><span>#0057FF</span><span>#1B00E2</span><span>#031C40</span></div></div>
+    </div>
+    <div class="tile g-nordic reveal" style="transition-delay:.3s">
+      <div class="aurora-mesh"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+      <div class="tile-info"><div class="tile-name">Nordic Blue</div><div class="tile-tag">Aurora Mesh &bull; 3 blobs</div><div class="tile-hex"><span>#1B00E2</span><span>#031C40</span><span>#4590FF</span></div></div>
+    </div>
+    <div class="tile g-sapphire reveal" style="transition-delay:.4s">
+      <div class="aurora-mesh"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+      <div class="tile-info"><div class="tile-name">Sapphire Glow</div><div class="tile-tag">Aurora Mesh &bull; 3 blobs</div><div class="tile-hex"><span>#1B00E2</span><span>#0057FF</span><span>#4590FF</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ KINETIC: Split Character Reveal ═══ -->
+<div class="kinetic-section" id="liquidAuroraSection">
+  <div class="scroll-glow" id="liquidAuroraGlow"></div>
+  <div class="split-heading scroll-lag reveal" id="splitText1" data-text="LIQUID AURORA" style="position:relative;z-index:2"></div>
+  <div class="liquid-container" style="z-index:-1">
+    <div class="liquid-blob lb-1"></div>
+    <div class="liquid-blob lb-2"></div>
+    <div class="liquid-blob lb-3"></div>
+  </div>
+</div>
+
+<!-- ═══ 02 — SOFT FLOW ═══ -->
+<div class="section">
+  <div class="reveal-stagger reveal">
+    <div class="section-label">02 — Soft Flow</div>
+    <div class="section-title scroll-lag">Smooth Transitions</div>
+    <div class="section-desc">Subtle animated linear gradients with slow oscillation. Soft Gradients 2.0 — quiet and elegant.</div>
+  </div>
+  <div class="grid grid-2">
+    <div class="tile g-ocean-breeze reveal" style="transition-delay:.1s">
+      <div style="position:absolute;inset:0;filter:blur(50px);overflow:hidden">
+        <div style="position:absolute;width:60%;height:60%;border-radius:50%;background:rgba(27,0,226,.2);top:-10%;left:20%;animation:meshA 10s ease-in-out infinite alternate"></div>
+        <div style="position:absolute;width:40%;height:40%;border-radius:50%;background:rgba(69,144,255,.15);bottom:10%;right:10%;animation:meshB 13s ease-in-out infinite alternate"></div>
+      </div>
+      <div class="tile-info"><div class="tile-name">Ocean Breeze</div><div class="tile-tag">Soft flow + blur circles</div><div class="tile-hex"><span>#031C40</span><span>#1B00E2</span><span>#4590FF</span></div></div>
+    </div>
+    <div class="tile g-twilight reveal" style="transition-delay:.2s">
+      <div style="position:absolute;inset:0;filter:blur(50px);overflow:hidden">
+        <div style="position:absolute;width:50%;height:50%;border-radius:50%;background:rgba(0,87,255,.2);top:10%;right:-5%;animation:meshC 12s ease-in-out infinite alternate"></div>
+        <div style="position:absolute;width:45%;height:45%;border-radius:50%;background:rgba(27,0,226,.15);bottom:-5%;left:15%;animation:meshA 14s ease-in-out infinite alternate"></div>
+      </div>
+      <div class="tile-info"><div class="tile-name">Twilight</div><div class="tile-tag">Soft flow + blur circles</div><div class="tile-hex"><span>#031C40</span><span>#1B00E2</span><span>#0057FF</span></div></div>
+    </div>
+    <div class="tile g-steel-wave reveal" style="transition-delay:.3s">
+      <div style="position:absolute;inset:0;filter:blur(50px);overflow:hidden">
+        <div style="position:absolute;width:55%;height:55%;border-radius:50%;background:rgba(0,87,255,.12);top:20%;left:-10%;animation:meshB 11s ease-in-out infinite alternate"></div>
+        <div style="position:absolute;width:35%;height:35%;border-radius:50%;background:rgba(3,28,64,.4);bottom:5%;right:15%;animation:meshC 15s ease-in-out infinite alternate"></div>
+      </div>
+      <div class="tile-info"><div class="tile-name">Steel Wave</div><div class="tile-tag">Soft flow + blur circles</div><div class="tile-hex"><span>#031C40</span><span>#0057FF</span><span>#1B00E2</span></div></div>
+    </div>
+    <div class="tile g-frost-drift reveal" style="transition-delay:.4s">
+      <div style="position:absolute;inset:0;filter:blur(50px);overflow:hidden">
+        <div style="position:absolute;width:50%;height:50%;border-radius:50%;background:rgba(69,144,255,.1);top:-5%;left:30%;animation:meshA 9s ease-in-out infinite alternate"></div>
+        <div style="position:absolute;width:40%;height:40%;border-radius:50%;background:rgba(27,0,226,.1);bottom:10%;left:0;animation:meshB 12s ease-in-out infinite alternate"></div>
+      </div>
+      <div class="tile-info"><div class="tile-name">Frost Drift</div><div class="tile-tag">Soft flow + blur circles</div><div class="tile-hex"><span>#031C40</span><span>#1B00E2</span><span>#4590FF</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 03 — GRAIN + BLUR ═══ -->
+<div class="section">
+  <div class="reveal-stagger reveal">
+    <div class="section-label">03 — Grain + Blur</div>
+    <div class="section-title scroll-lag">Texture Gradients</div>
+    <div class="section-desc">Radial gradients with subtle grain overlay and pulsating blob effects. Dreamy, premium aesthetic.</div>
+  </div>
+  <div class="grid grid-2">
+    <div class="tile g-grain-abyss grain-overlay reveal" style="transition-delay:.1s">
+      <div class="grain-blob" style="width:50%;height:50%;background:var(--bh-primary);top:10%;left:20%;animation-delay:0s"></div>
+      <div class="tile-info"><div class="tile-name">Abyss</div><div class="tile-tag">Grain &bull; Radial blur</div><div class="tile-hex"><span>#1B00E2</span><span>#031C40</span></div></div>
+    </div>
+    <div class="tile g-grain-nebula grain-overlay reveal" style="transition-delay:.2s">
+      <div class="grain-blob" style="width:45%;height:45%;background:var(--bh-azure);top:20%;right:15%;animation-delay:-2s"></div>
+      <div class="tile-info"><div class="tile-name">Nebula</div><div class="tile-tag">Grain &bull; Dual radial</div><div class="tile-hex"><span>#4590FF</span><span>#1B00E2</span></div></div>
+    </div>
+    <div class="tile g-grain-plasma grain-overlay reveal" style="transition-delay:.3s">
+      <div class="grain-blob" style="width:40%;height:40%;background:var(--bh-sky);bottom:10%;left:30%;animation-delay:-4s"></div>
+      <div class="tile-info"><div class="tile-name">Plasma</div><div class="tile-tag">Grain &bull; Triple radial</div><div class="tile-hex"><span>#1B00E2</span><span>#4590FF</span><span>#031C40</span></div></div>
+    </div>
+    <div class="tile g-grain-ink grain-overlay reveal" style="transition-delay:.4s">
+      <div class="grain-blob" style="width:50%;height:50%;background:var(--bh-dark);top:20%;right:20%;animation-delay:-6s;opacity:.5"></div>
+      <div class="tile-info"><div class="tile-name">Ink</div><div class="tile-tag">Grain &bull; Minimal</div><div class="tile-hex"><span>#031C40</span><span>#1B00E2</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ KINETIC: Radial Core Split Text ═══ -->
+<div class="kinetic-section" id="radialCoreSection">
+  <div class="scroll-glow" id="radialCoreGlow"></div>
+  <div class="split-heading scroll-lag reveal" id="splitText2" data-text="RADIAL CORE" style="position:relative;z-index:2"></div>
+</div>
+
+<!-- ═══ 04 — RADIAL GLOW ═══ -->
+<div class="section">
+  <div class="reveal-stagger reveal">
+    <div class="section-label">04 — Radial Glow</div>
+    <div class="section-title scroll-lag">Radiant Radial Gradients</div>
+    <div class="section-desc">Radial glow effects with subtle brightness pulse. Ideal for hero sections and backgrounds.</div>
+  </div>
+  <div class="grid grid-2">
+    <div class="tile g-glow-core reveal" style="transition-delay:.1s">
+      <div class="tile-info"><div class="tile-name">Core</div><div class="tile-tag">Radial center &bull; Pulse</div><div class="tile-hex"><span>#1B00E2</span><span>#031C40</span></div></div>
+    </div>
+    <div class="tile g-glow-beam reveal" style="transition-delay:.2s">
+      <div class="tile-info"><div class="tile-name">Beam</div><div class="tile-tag">Vertical dual &bull; Shift</div><div class="tile-hex"><span>#1B00E2</span><span>#031C40</span></div></div>
+    </div>
+    <div class="tile g-glow-edge reveal" style="transition-delay:.3s">
+      <div class="tile-info"><div class="tile-name">Edge</div><div class="tile-tag">Horizontal dual &bull; Shift</div><div class="tile-hex"><span>#1B00E2</span><span>#0057FF</span></div></div>
+    </div>
+    <div class="tile g-glow-corner reveal" style="transition-delay:.4s">
+      <div class="tile-info"><div class="tile-name">Corner</div><div class="tile-tag">Diagonal &bull; Pulse</div><div class="tile-hex"><span>#1B00E2</span><span>#031C40</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 05 — LIQUID MOTION ═══ -->
+<div class="section">
+  <div class="reveal-stagger reveal">
+    <div class="section-label">05 — Liquid Motion</div>
+    <div class="section-title scroll-lag">Organic Blob Gradients</div>
+    <div class="section-desc">Morphing organic shapes with border-radius animation. The hottest 2026 trend — Liquid Motion.</div>
+  </div>
+  <div class="grid grid-2">
+    <div class="tile reveal" style="transition-delay:.1s">
+      <div class="liquid-container">
+        <div class="liquid-blob" style="width:70%;height:60%;background:var(--bh-primary);top:-15%;left:-10%;filter:blur(50px);opacity:.35;animation:liquidMorph 12s ease-in-out infinite"></div>
+        <div class="liquid-blob" style="width:50%;height:50%;background:var(--bh-dark);bottom:-10%;right:-5%;filter:blur(50px);opacity:.5;animation:liquidMorph 14s ease-in-out infinite reverse"></div>
+      </div>
+      <div class="tile-info"><div class="tile-name">Binary</div><div class="tile-tag">2 blobs &bull; Subtle</div><div class="tile-hex"><span>#1B00E2</span><span>#031C40</span></div></div>
+    </div>
+    <div class="tile reveal" style="transition-delay:.2s">
+      <div class="liquid-container">
+        <div class="liquid-blob lb-1" style="opacity:.3"></div>
+        <div class="liquid-blob lb-2" style="opacity:.35"></div>
+        <div class="liquid-blob lb-3" style="opacity:.25"></div>
+      </div>
+      <div class="tile-info"><div class="tile-name">Triad</div><div class="tile-tag">3 blobs &bull; Full palette</div><div class="tile-hex"><span>#1B00E2</span><span>#031C40</span><span>#4590FF</span></div></div>
+    </div>
+    <div class="tile reveal" style="transition-delay:.3s">
+      <div class="liquid-container">
+        <div class="liquid-blob" style="width:80%;height:40%;background:var(--bh-primary);top:30%;left:-20%;filter:blur(60px);opacity:.25;animation:liquidMorph 16s ease-in-out infinite"></div>
+        <div class="liquid-blob" style="width:60%;height:30%;background:var(--bh-azure);top:20%;right:-15%;filter:blur(60px);opacity:.2;animation:liquidMorph 13s ease-in-out infinite reverse"></div>
+        <div class="liquid-blob" style="width:40%;height:40%;background:var(--bh-sky);bottom:-5%;left:30%;filter:blur(60px);opacity:.15;animation:liquidMorph 11s ease-in-out infinite;animation-delay:-3s"></div>
+        <div class="liquid-blob" style="width:30%;height:30%;background:var(--bh-dark);top:0;right:20%;filter:blur(50px);opacity:.4;animation:liquidMorph 9s ease-in-out infinite;animation-delay:-6s"></div>
+      </div>
+      <div class="tile-info"><div class="tile-name">Quad</div><div class="tile-tag">4 blobs &bull; Complex</div><div class="tile-hex"><span>#1B00E2</span><span>#0057FF</span><span>#4590FF</span><span>#031C40</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ KINETIC: Cursor Proximity Glow Finale ═══ -->
+<div class="kinetic-section" id="finaleSection" style="min-height:90vh;position:relative">
+  <div class="liquid-container" style="z-index:-1">
+    <div class="liquid-blob" style="width:50%;height:60%;background:var(--bh-primary);top:-10%;left:10%;filter:blur(80px);opacity:.25;animation:liquidMorph 18s ease-in-out infinite"></div>
+    <div class="liquid-blob" style="width:40%;height:50%;background:var(--bh-azure);bottom:0;right:10%;filter:blur(80px);opacity:.2;animation:liquidMorph 14s ease-in-out infinite reverse"></div>
+    <div class="liquid-blob" style="width:30%;height:30%;background:var(--bh-sky);top:40%;left:40%;filter:blur(60px);opacity:.15;animation:liquidMorph 10s ease-in-out infinite;animation-delay:-5s"></div>
+  </div>
+  <!-- Cursor proximity glow orb -->
+  <div class="proximity-glow" id="proximityGlow"></div>
+  <div style="font-size:.65rem;font-weight:700;letter-spacing:.3em;color:var(--bh-sky);margin-bottom:2rem;position:relative;z-index:2">BIOMETRICS HOUSE</div>
+  <div class="vr-text reveal" id="vrText" style="position:relative;z-index:2">
+    <span class="line"><span class="line-inner">Designed for</span></span>
+    <span class="line"><span class="line-inner" style="background:linear-gradient(90deg,var(--bh-primary),var(--bh-sky));-webkit-background-clip:text;-webkit-text-fill-color:transparent">the future.</span></span>
+    <span class="line"><span class="line-inner">Built on blue.</span></span>
+  </div>
+  <p style="font-size:.85rem;color:rgba(255,255,255,.35);margin-top:3rem;position:relative;z-index:2" class="reveal">#1B00E2 &bull; #031C40 &bull; #0057FF &bull; #4590FF</p>
+</div>
+
+<footer>
+  <img src="bh-logo-white.svg" alt="BH" style="width:200px;height:200px;opacity:1;margin-bottom:1.5rem;display:block;margin-inline:auto">
+  &copy; 2026 BIOMETRICS HOUSE &bull; Gradient Trends Showcase
+</footer>
+
+<script>
+// ═══ Scroll Progress Bar ═══
+const scrollProgress = document.getElementById('scrollProgress');
+function updateProgress() {
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  scrollProgress.style.width = (window.scrollY / h * 100) + '%';
+}
+
+// ═══ Intersection Observer ═══
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ═══ Split Text into Characters ═══
+document.querySelectorAll('.split-heading[data-text]').forEach(el => {
+  const text = el.dataset.text;
+  const words = text.split(' ');
+  el.innerHTML = words.map(w =>
+    '<span class="word">' + w.split('').map((c, i) =>
+      `<span class="char" style="transition-delay:${i * .04}s;background:linear-gradient(135deg,var(--bh-sky),#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent">${c}</span>`
+    ).join('') + '</span>'
+  ).join('');
+  observer.observe(el);
+});
+
+// ═══ Scroll-driven Marquee ═══
+let lastScroll = 0;
+const marquee1 = document.getElementById('marquee1');
+let m1x = 0;
+
+function updateMarquees() {
+  const delta = window.scrollY - lastScroll;
+  lastScroll = window.scrollY;
+  m1x -= delta * 0.8;
+  m1x -= 0.3;
+  if (marquee1) marquee1.style.transform = `translateX(${m1x}px)`;
+}
+
+// ═══ Radial Core Scroll Glow ═══
+const radialCoreSection = document.getElementById('radialCoreSection');
+const radialCoreGlow = document.getElementById('radialCoreGlow');
+
+function updateRadialCoreGlow() {
+  if (!radialCoreSection || !radialCoreGlow) return;
+  const rect = radialCoreSection.getBoundingClientRect();
+  const vh = window.innerHeight;
+  const sectionCenter = rect.top + rect.height / 2;
+  const viewportCenter = vh / 2;
+  const dist = Math.abs(sectionCenter - viewportCenter);
+  const maxDist = vh * 0.7;
+  const proximity = Math.max(0, 1 - dist / maxDist);
+  const size = 300 + proximity * 600;
+  radialCoreGlow.style.width = size + 'px';
+  radialCoreGlow.style.height = size + 'px';
+  radialCoreGlow.style.opacity = proximity * 0.85;
+  radialCoreGlow.style.filter = `blur(${30 + proximity * 40}px)`;
+
+  const splitEl = document.getElementById('splitText2');
+  if (splitEl) {
+    const scale = 1 + proximity * 0.08;
+    const shadow = proximity * 40;
+    splitEl.style.transform = `scale(${scale})`;
+    splitEl.style.textShadow = `0 0 ${shadow}px rgba(69,144,255,${proximity * 0.5}), 0 0 ${shadow * 2}px rgba(0,87,255,${proximity * 0.2})`;
+  }
+}
+
+
+// ═══ Cursor Proximity Glow ═══
+const finaleSection = document.getElementById('finaleSection');
+const proximityGlow = document.getElementById('proximityGlow');
+const vrText = document.getElementById('vrText');
+
+function updateProximityGlow(e) {
+  if (!finaleSection || !proximityGlow || !vrText) return;
+  const sRect = finaleSection.getBoundingClientRect();
+  // Check if cursor is within the finale section
+  if (e.clientY < sRect.top || e.clientY > sRect.bottom ||
+      e.clientX < sRect.left || e.clientX > sRect.right) {
+    proximityGlow.style.opacity = '0';
+    return;
+  }
+  // Position relative to section
+  const relX = e.clientX - sRect.left;
+  const relY = e.clientY - sRect.top;
+  proximityGlow.style.left = relX + 'px';
+  proximityGlow.style.top = relY + 'px';
+
+  // Distance from text center
+  const tRect = vrText.getBoundingClientRect();
+  const tcx = tRect.left + tRect.width / 2;
+  const tcy = tRect.top + tRect.height / 2;
+  const dist = Math.hypot(e.clientX - tcx, e.clientY - tcy);
+  const maxDist = 500;
+  const proximity = Math.max(0, 1 - dist / maxDist);
+
+  // Scale glow based on proximity — closer = bigger + brighter
+  const size = 300 + proximity * 500;
+  const opacity = proximity * 0.9;
+  proximityGlow.style.width = size + 'px';
+  proximityGlow.style.height = size + 'px';
+  proximityGlow.style.opacity = opacity;
+  proximityGlow.style.filter = `blur(${20 + proximity * 30}px)`;
+}
+document.addEventListener('mousemove', updateProximityGlow);
+
+// ═══ Scroll Glow — Liquid Aurora ═══
+const liquidAuroraSection = document.getElementById('liquidAuroraSection');
+const liquidAuroraGlow = document.getElementById('liquidAuroraGlow');
+
+function updateScrollGlow() {
+  if (!liquidAuroraSection || !liquidAuroraGlow) return;
+  const rect = liquidAuroraSection.getBoundingClientRect();
+  const vh = window.innerHeight;
+  // Center of section relative to viewport center
+  const sectionCenter = rect.top + rect.height / 2;
+  const viewportCenter = vh / 2;
+  const dist = Math.abs(sectionCenter - viewportCenter);
+  const maxDist = vh * 0.7;
+  const proximity = Math.max(0, 1 - dist / maxDist);
+  // Glow grows and brightens as section reaches center
+  const size = 300 + proximity * 600;
+  liquidAuroraGlow.style.width = size + 'px';
+  liquidAuroraGlow.style.height = size + 'px';
+  liquidAuroraGlow.style.opacity = proximity * 0.85;
+  liquidAuroraGlow.style.filter = `blur(${30 + proximity * 40}px)`;
+
+  // Scale + text-shadow on LIQUID AURORA text
+  const splitEl = document.getElementById('splitText1');
+  if (splitEl) {
+    const scale = 1 + proximity * 0.08;
+    const shadow = proximity * 40;
+    splitEl.style.transform = `scale(${scale})`;
+    splitEl.style.textShadow = `0 0 ${shadow}px rgba(69,144,255,${proximity * 0.5}), 0 0 ${shadow * 2}px rgba(0,87,255,${proximity * 0.2})`;
+  }
+}
+
+// ═══ Scroll Lag ═══
+const lagEls = document.querySelectorAll('.scroll-lag');
+let smoothScroll = 0;
+function updateLag() {
+  smoothScroll += (window.scrollY - smoothScroll) * 0.08;
+  const delta = (window.scrollY - smoothScroll) * 0.03;
+  lagEls.forEach(el => {
+    el.style.transform = `translateY(${delta}px)`;
+  });
+}
+
+// ═══ Main RAF Loop ═══
+function tick() {
+  updateProgress();
+  updateMarquees();
+  updateRadialCoreGlow();
+  updateScrollGlow();
+  updateLag();
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>
